@@ -1,0 +1,40 @@
+name: CI-compile
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+    types: [run_build]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ps2dev/ps2dev:latest
+    steps:
+    - name: Install dependencies
+      run: |
+        apk add build-base git zip gawk
+    # i need to change this library 
+    - name: Git clone sjpcm lib
+      run: |
+        git clone https://github.com/ps2homebrew/isjpcm.git && cd isjpcm 
+        make install
+
+    - name: git checkout
+      uses: actions/checkout@v2
+
+    - run: git fetch --prune --unshallow
+
+    - name: Make
+      run: make all clean
+     
+    - name: Get short SHA
+      id: slug
+      run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+
+    - name: Upload artifacts
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: ps2doom-${{ steps.slug.outputs.sha8 }}
+        path: bin

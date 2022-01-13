@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -26,6 +26,10 @@
 #include <stdio.h>
 #include <string.h>
 
+/// cosmito
+#define DOMULTITASK RotateThreadReadyQueue(42)
+#define pf printf
+
 //
 // Global parameters/defines.
 //
@@ -43,7 +47,7 @@ typedef enum
   // DOOM 2 german edition not handled
   retail,	// DOOM 1 retail, E4, M36
   indetermined	// Well, no IWAD found.
-  
+
 } GameMode_t;
 
 
@@ -80,8 +84,10 @@ typedef enum
 // The integrated sound support is experimental,
 //  and unfinished. Default is synchronous.
 // Experimental asynchronous timer based is
-//  handled by SNDINTR. 
+//  handled by SNDINTR.
+#ifndef SNDSERV     /// cosmito
 #define SNDSERV  1
+#endif              /// cosmito
 //#define SNDINTR  1
 
 
@@ -123,7 +129,7 @@ typedef enum
 
 // The current state of the game: whether we are
 // playing, gazing at the intermission screen,
-// the game final animation, or a demo. 
+// the game final animation, or a demo.
 typedef enum
 {
     GS_LEVEL,
@@ -167,9 +173,9 @@ typedef enum
     it_blueskull,
     it_yellowskull,
     it_redskull,
-    
+
     NUMCARDS
-    
+
 } card_t;
 
 
@@ -190,7 +196,7 @@ typedef enum
     wp_supershotgun,
 
     NUMWEAPONS,
-    
+
     // No pending weapon change.
     wp_nochange
 
@@ -205,7 +211,7 @@ typedef enum
     am_cell,	// Plasma rifle, BFG.
     am_misl,	// Missile launcher.
     NUMAMMO,
-    am_noammo	// Unlimited for chainsaw / fist.	
+    am_noammo	// Unlimited for chainsaw / fist.
 
 } ammotype_t;
 
@@ -220,7 +226,7 @@ typedef enum
     pw_allmap,
     pw_infrared,
     NUMPOWERS
-    
+
 } powertype_t;
 
 
@@ -236,7 +242,7 @@ typedef enum
     INVISTICS	= (60*TICRATE),
     INFRATICS	= (120*TICRATE),
     IRONTICS	= (60*TICRATE)
-    
+
 } powerduration_t;
 
 
@@ -280,6 +286,23 @@ typedef enum
 #define KEY_LALT	KEY_RALT
 
 
+// cosmito : extra defines
+#define STRAFELEFT      256 + 0
+#define STRAFERIGHT     256 + 1
+
+
+//#define PS2_SQUARE 0
+//#define PS2_CROSS 1
+//#define PS2_CIRCLE 2
+//#define PS2_TRIANGLE 3
+//#define PS2_SELECT 4
+//#define PS2_START 5
+//#define PS2_L1 6
+//#define PS2_R1 7
+//#define PS2_L2 8
+//#define PS2_R2 9
+//#define PS2_L3 10
+//#define PS2_R3 11
 
 // DOOM basic types (boolean),
 //  and max/min values.

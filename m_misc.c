@@ -29,6 +29,8 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <fcntl.h>
+#include <tamtypes.h>
 
 extern int access(char *file, int mode);
 
@@ -94,9 +96,6 @@ M_DrawText
 
     return x;
 }
-
-
-
 
 //
 // M_WriteFile
@@ -178,6 +177,9 @@ extern int	key_use;
 extern int	key_strafe;
 extern int	key_speed;
 
+extern int  key_weaponnext;           // cosmito : added
+extern int  key_weaponprevious;       // cosmito : added
+
 extern int	mousebfire;
 extern int	mousebstrafe;
 extern int	mousebforward;
@@ -219,7 +221,7 @@ typedef struct
 default_t	defaults[] =
 {
     {"mouse_sensitivity",&mouseSensitivity, 5},
-    {"sfx_volume",&snd_SfxVolume, 8},
+    {"sfx_volume",&snd_SfxVolume, 15},
     {"music_volume",&snd_MusicVolume, 8},
     {"show_messages",&showMessages, 1},
     
@@ -235,6 +237,10 @@ default_t	defaults[] =
     {"key_use",&key_use, ' '},
     {"key_strafe",&key_strafe, KEY_RALT},
     {"key_speed",&key_speed, KEY_RSHIFT},
+
+    // cosmito : added
+    {"key_weaponnext",&key_weaponnext, 'p'},     // key to select next weapon with ammo
+    {"key_weaponprevious",&key_weaponprevious, 'o'},     // key to select previous weapon with ammo
 
     {"use_mouse",&usemouse, 1},
     {"mouseb_fire",&mousebfire,0},
@@ -254,7 +260,7 @@ default_t	defaults[] =
 
 
 
-    {"usegamma",&usegamma, 0},
+    {"usegamma",&usegamma, 1},
 
 #ifndef __BEOS__
     {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0 },
@@ -280,6 +286,8 @@ char*	defaultfile;
 //
 void M_SaveDefaults (void)
 {
+    return;         /// cosmito : currently disabled
+
     int		i;
     int		v;
     FILE*	f;
@@ -503,5 +511,3 @@ void M_ScreenShot (void)
 	
     players[consoleplayer].message = "screen shot";
 }
-
-

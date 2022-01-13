@@ -262,7 +262,6 @@ P_InterceptVector
     float	v2y;
     float	v2dx;
     float	v2dy;
-
     v1x = (float)v1->x/FRACUNIT;
     v1y = (float)v1->y/FRACUNIT;
     v1dx = (float)v1->dx/FRACUNIT;
@@ -273,13 +272,11 @@ P_InterceptVector
     v2dy = (float)v2->dy/FRACUNIT;
 	
     den = v1dy*v2dx - v1dx*v2dy;
-
     if (den == 0)
 	return 0;	// parallel
     
     num = (v1x - v2x)*v1dy + (v2y - v1y)*v1dx;
     frac = num / den;
-
     return frac*FRACUNIT;
 #endif
 }
@@ -878,6 +875,3 @@ P_PathTraverse
     // go through the sorted list
     return P_TraverseIntercepts ( trav, FRACUNIT );
 }
-
-
-
