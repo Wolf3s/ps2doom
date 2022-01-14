@@ -478,12 +478,13 @@ void CheckAbort (void)
 	I_StartTic (); 
 	
     I_StartTic ();
-    for ( ; eventtail != eventhead 
-	      ; eventtail = (++eventtail)&(MAXEVENTS-1) ) 
+  
+    for (; eventtail != eventhead ; eventtail = MAXEVENTS-1 ) 
     { 
-	ev = &events[eventtail]; 
-	if (ev->type == ev_keydown && ev->data1 == KEY_ESCAPE)
+		ev = &events[eventtail]; 
+		if (ev->type == ev_keydown && ev->data1 == KEY_ESCAPE)
 	    I_Error ("Network game synchronization aborted.");
+		++eventtail;
     } 
 }
 
@@ -730,7 +731,7 @@ void TryRunTics (void)
     }// demoplayback
 	
     // wait for new tics if needed
-    while (lowtic < gametic/ticdup + counts)	
+    while (lowtic < gametic/ticdup + counts)
     {
 	NetUpdate ();   
 	lowtic = MAXINT;
@@ -746,7 +747,7 @@ void TryRunTics (void)
 	if (I_GetTime ()/ticdup - entertic >= 20)
 	{
 	    M_Ticker ();
-        DOMULTITASK;
+//        DOMULTITASK;
 	    return;
 	} 
     }
@@ -764,7 +765,7 @@ void TryRunTics (void)
 	    G_Ticker ();
 	    gametic++;
 	    
-        DOMULTITASK;
+//        DOMULTITASK;
 
 	    // modify command for duplicated tics
 	    if (i != ticdup-1)
