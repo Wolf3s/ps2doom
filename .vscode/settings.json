@@ -90,6 +90,7 @@
         "elf_structure.h": "c",
         "debug.h": "c",
         "type_traits": "c",
-        "wav.h": "c"
+        "wav.h": "c",
+        "cstdio": "c"
     }
 }

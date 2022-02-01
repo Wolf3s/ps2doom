@@ -22,7 +22,7 @@ jobs:
     - name: Git clone cosMix
       run: |
          git clone https://github.com/Doom-modding-and-etc/cosmix.git && cd cosmix
-         make all
+         make all 
 
     - name: git checkout
       uses: actions/checkout@v2
@@ -30,7 +30,7 @@ jobs:
     - run: git fetch --prune --unshallow
 
     - name: Make
-      run: make all clean
+      run: make all 
      
     - name: Get short SHA
       id: slug

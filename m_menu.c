@@ -520,7 +520,7 @@ void M_ReadSaveStrings(void)
 	sprintf(name,"mc0:PS2DOOM/%s%d.dsg",currentWadName,i);
 
 	//handle = fopen (name, "r");
-    handle = fioOpen(name, O_RDONLY);
+    handle = fopen(name, O_RDONLY);
 	if (/*handle == NULL || */handle < 0)
 	{
 	    strcpy(&savegamestrings[i][0],EMPTYSTRING);
@@ -530,7 +530,7 @@ void M_ReadSaveStrings(void)
 	//count = fread (&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
     count = fioRead (handle, &savegamestrings[i], SAVESTRINGSIZE);
 	//fclose (handle);
-    fioClose (handle);
+    fclose (handle);
 	LoadMenu[i].status = 1;
     }
 }

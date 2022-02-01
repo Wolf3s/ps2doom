@@ -568,8 +568,8 @@ static int FileExists(char *filename)
    fstream = fopen(filename, "r");
 
    if (fstream != NULL) 
-   { fclose(fstream); return 1; 
-
+   { 
+       fclose(fstream); return 1; 
    } 
      else 
     { 
@@ -648,52 +648,7 @@ static void IdentifyIWADByName(char *name)
   gamemission = none;
 }
 
-/*
-  static void FindIWAD
 
-Description:
-  Checks availability of IWAD files by name, 
-  to determine whether registered/commercial features 
-  should be executed (notably loading PWAD's).
-
-*/
-
-static void FindIWAD (void)
-{ 
-  char *doomwaddir; 
-  int result; 
-  int iwadparm;
-
-  result = 0; 
-  doomwaddir = getenv("DOOMWADDIR"); 
-  iwadparm = M_CheckParm("-iwad");
-
-  if (iwadparm)
-  {
-    iwadfile = myargv[iwadparm + 1]; 
-    D_AddFile(iwadfile); 
-    IdentifyIWADByName(iwadfile); 
-    result = 1;
-  }
-  
-  else if (doomwaddir != NULL) 
-  {
-    result = Find_IWADS_Dir(doomwaddir);
-  }
-  
-  if (result == 0)
-  {
-    result = Find_IWADS_Dir(".") 
-    || Find_IWADS_Dir("/usr/share/games/doom") 
-    || Find_IWADS_Dir("/usr/local/share/games/doom");
-  }
-
-  if (result == 0)
-  {
-     I_Error("Game mode indeterminate. No IWAD file was found. Try\n" "specifying one with the '-iwad' command line parameter.\n");
-  }
-
-}
 
 /*
 Find out what version of Doom IWAD is playing.
@@ -1024,6 +979,10 @@ void IdentifyVersionAndSelect (void)        // cosmito
     char *home;
     char *doomwaddir;
 	
+    char *doomiwaddir; 
+    int result; 
+    int iwadparm;
+
 #ifdef _EE
     extern char fullPath[256];
 #endif
@@ -1098,18 +1057,45 @@ void IdentifyVersionAndSelect (void)        // cosmito
     {
         gamemode = commercial;
         devparm = true;
-        /* I don't bother
-        if(plutonia)
+ 
+ 
         D_AddFile (DEVDATA"plutonia.wad");
-        else if(tnt)
         D_AddFile (DEVDATA"tnt.wad");
-        else*/
         D_AddFile (DEVDATA"doom2.wad");
-
+        D_AddFile (DEVDATA"doom.wad");
         D_AddFile (DEVMAPS"cdata/texture1.lmp");
         D_AddFile (DEVMAPS"cdata/pnames.lmp");
         strcpy (basedefault,DEVDATA"default.cfg");
         return;
+    }
+
+    //fix this later
+    doomiwaddir = getenv("DOOMIWADDIR"); 
+    iwadparm = M_CheckParm("-iwad");
+    if(M_CheckParm("-iwad"))
+    {
+     if (iwadparm)
+     {
+       iwadfile = myargv[iwadparm + 1]; 
+       D_AddFile(iwadfile); 
+       IdentifyIWADByName(iwadfile); 
+       result = 1;
+     }
+  
+      else if (doomiwaddir != NULL) 
+     {
+      result = Find_IWADS_Dir(doomiwaddir);
+     }
+  
+     if (result == 0)
+     {
+       result = Find_IWADS_Dir(".") || Find_IWADS_Dir("mass0:/ps2doom") || Find_IWADS_Dir("pfs0:/ps2doom");
+     }
+
+     if (result == 0)
+     {
+       I_Error("Game mode indeterminate. No IWAD file was found. Try\n" "specifying one with the '-iwad' command line parameter.\n");
+     }
     }
 
     /// pad init
@@ -1149,7 +1135,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
         SleepThread();
     }
 
-
+    //TBD: Change this to other place 
     scr_printf("Point to a WAD with 'dpad Up' and 'dpad Up' and select with 'X' or 'O'\n");
     
     int ymin = 6, nWadsFound = 0;
@@ -1394,6 +1380,7 @@ void FindResponseFile (void)
 	}
 }
 
+//TBD: Put all iwad functions here
 
 //
 // D_DoomMain
@@ -1406,8 +1393,6 @@ void D_DoomMain (void)
     FindResponseFile ();
 	
     IdentifyVersionAndSelect();
-    
-    FindIWAD();
 
     setbuf (stdout, NULL);
     modifiedgame = false;
