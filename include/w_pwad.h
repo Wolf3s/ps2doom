@@ -1,5 +1,5 @@
 /*
-** p_openmap.cpp
+** w_pwad.c
 **
 ** creates the data structures needed to load a map from the resource files.
 **
@@ -45,6 +45,7 @@
 
 #define PWAD_ID	MAKE_ID('P','W','A','D')
 
+#define LUMP_STATIC 0x00000001 /* assigned gltexture should be static */
 typedef struct
 { 
   char identification[4];  
@@ -83,7 +84,7 @@ typedef struct
 
 extern pwadfile_info_t *pwadfiles;
 
-extern size_t numwadfiles; // CPhipps - size of the wadfiles array
+extern size_t numpwadfiles; // CPhipps - size of the wadfiles array
 
 
 typedef enum
@@ -115,7 +116,7 @@ typedef struct
  int flags; //e6y
 } lumpinfo_t;
 
-#define LUMP_STATIC 0x00000001 /* assigned gltexture should be static */
+
 
 extern lumpinfo_t *lumpinfo;
 extern int numlumps;

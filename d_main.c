@@ -966,7 +966,6 @@ void checkForWadFile(char* wadname, char** foundwadfiles, char* foundfile, int* 
 
 void IdentifyVersionAndSelect (void)        // cosmito
 {
-
     char*	doom1wad;
     char*	doomwad;
     char*	doomuwad;
@@ -1073,30 +1072,27 @@ void IdentifyVersionAndSelect (void)        // cosmito
     //fix this later
     doomiwaddir = getenv("DOOMIWADDIR"); 
     iwadparm = M_CheckParm("-iwad");
-    if(M_CheckParm("-iwad"))
+    if(iwadparm)
     {
-     if (iwadparm)
-     {
        iwadfile = myargv[iwadparm + 1]; 
        D_AddFile(iwadfile); 
        IdentifyIWADByName(iwadfile); 
        result = 1;
-     }
-  
-      else if (doomiwaddir != NULL) 
+        
+     if (doomiwaddir != NULL) 
      {
       result = Find_IWADS_Dir(doomiwaddir);
      }
   
-     if (result == 0)
+     else if (result = 0)
      {
        result = Find_IWADS_Dir(".") || Find_IWADS_Dir("mass0:/ps2doom") || Find_IWADS_Dir("pfs0:/ps2doom");
      }
-
-     if (result == 0)
+     
+     else
      {
        I_Error("Game mode indeterminate. No IWAD file was found. Try\n" "specifying one with the '-iwad' command line parameter.\n");
-     }
+     }    
     }
 
     /// pad init
