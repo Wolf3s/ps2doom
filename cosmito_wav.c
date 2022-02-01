@@ -10,7 +10,6 @@ int GetFilesize(FILE * fd)
 	return (size);
 }
 
-
 int GetWAVsize(char *filename)
 {
     int size;
@@ -19,12 +18,14 @@ int GetWAVsize(char *filename)
     
     if (wav != NULL) 
     {
-	fseek(wav, 0, SEEK_END); 
-	size = (int)ftell(wav); 
-	size -= 0x30; fclose(wav); 
-	return size;
-    } else 
-	return 0;
-
+	 fseek(wav, 0, SEEK_END); 
+	 size = (int)ftell(wav); 
+	 size -= 0x30; fclose(wav); 
+	 return size;
+    } 
+	else 
+	{
+		return 0;
+	}
 }
 

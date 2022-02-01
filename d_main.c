@@ -641,8 +641,8 @@ static void IdentifyIWADByName(char *name)
       // Check if it ends in this IWAD name.
       if (!strcasecmp(name + strlen(name) - strlen(iwads[i].name), iwads[i].name)) 
       { 
-	gamemission = iwads[i].mission; 
-	break; 
+	    gamemission = iwads[i].mission; 
+	    break; 
       }
    }
   gamemission = none;
@@ -980,6 +980,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
     char *doomwaddir;
 	
     char *doomiwaddir; 
+    
     int result; 
     int iwadparm;
 
