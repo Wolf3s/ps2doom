@@ -357,15 +357,20 @@ extern  boolean         demorecording;
 
 void D_DoomLoop (void)
 {
+    int debugparam;
+    debugparam = M_CheckParm ("-debugfile");
+
     if (demorecording)
-	G_BeginRecording ();
-		
-    if (M_CheckParm ("-debugfile"))
     {
-	char    filename[20];
-	sprintf (filename,"debug%i.txt",consoleplayer);
-	printf ("debug output to: %s\n",filename);
-	debugfile = fopen (filename,"w");
+        G_BeginRecording ();
+    }
+		
+    if (debugparam)
+    {
+	  char    filename[20];
+	  sprintf (filename,"debug%i.txt",consoleplayer);
+	  printf ("debug output to: %s\n",filename);
+	  debugfile = fopen (filename,"w");
     }
 	
     I_InitGraphics ();
@@ -571,10 +576,11 @@ static int FileExists(char *filename)
    { 
        fclose(fstream); return 1; 
    } 
-     else 
-    { 
-	return 0; 
-    }
+   
+   else 
+   { 
+	 return 0; 
+   }
 }
 
 struct
@@ -979,9 +985,23 @@ void IdentifyVersionAndSelect (void)        // cosmito
     char *doomwaddir;
 	
     char *doomiwaddir; 
-    
     int result; 
+     
+    /******************************************************************************************** 
+    **   parameter commands in this case it will be just the name of parmeter like int comdev; **
+    **   instead of a command like M_Checkparam = ("-comdev")                                  **
+    *********************************************************************************************/
+    
+    int shdev;
+    int regdev;
+    int comdev;
     int iwadparm;
+
+    doomiwaddir = getenv("DOOMIWADDIR"); 
+    iwadparm = M_CheckParm("-iwad");
+    shdev = M_CheckParm("-shdev");
+    regdev = M_CheckParm("-regdev");
+    comdev = M_CheckParm("-comdev");
 
 #ifdef _EE
     extern char fullPath[256];
@@ -1030,7 +1050,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
       home = ".";
     sprintf(basedefault, "%s.doomrc", home);
 
-    if (M_CheckParm ("-shdev"))
+    if (shdev)
     {
         gamemode = shareware;
         devparm = true;
@@ -1041,7 +1061,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
         return;
     }
 
-    if (M_CheckParm ("-regdev"))
+    if (regdev)
     {
         gamemode = registered;
         devparm = true;
@@ -1053,11 +1073,10 @@ void IdentifyVersionAndSelect (void)        // cosmito
         return;
     }
 
-    if (M_CheckParm ("-comdev"))
+    if (comdev)
     {
         gamemode = commercial;
         devparm = true;
- 
  
         D_AddFile (DEVDATA"plutonia.wad");
         D_AddFile (DEVDATA"tnt.wad");
@@ -1069,9 +1088,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
         return;
     }
 
-    //fix this later
-    doomiwaddir = getenv("DOOMIWADDIR"); 
-    iwadparm = M_CheckParm("-iwad");
+
     if(iwadparm)
     {
        iwadfile = myargv[iwadparm + 1]; 
@@ -1084,7 +1101,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
       result = Find_IWADS_Dir(doomiwaddir);
      }
   
-     else if (result = 0)
+     else if (result == 0)
      {
        result = Find_IWADS_Dir(".") || Find_IWADS_Dir("mass0:/ps2doom") || Find_IWADS_Dir("pfs0:/ps2doom");
      }
@@ -1384,23 +1401,66 @@ void FindResponseFile (void)
 //
 void D_DoomMain (void)
 {
-    int             p;
-    char                    file[256];
+    
+    int p;
+    
+    //command line parameters
+    int nomonsters;
+    int respawn;
+    int fastparam;
+    int devparam; 
+    int altdeath;
+    int deathmatch;
+    int turbo;
+    int wart;
+    int playdemo;
+    int timedemo;    
+    int skill;	
+    int episode;
+    int timer;    
+    int time;
+    int avg;
+    int warp;
+    int statcopy;
+    int record;
+    int loadgame;
+    char file[256];
 
-    FindResponseFile ();
+    //todo: add the switch case here of psp doom 	
+    nomonsters = M_CheckParm ("-nomonsters");
+    respawn = M_CheckParm ("-respawn");
+    fastparm = M_CheckParm ("-fast");
+    devparm = M_CheckParm ("-devparm");
+    altdeath = M_CheckParm ("-altdeath");
+    deathmatch = M_CheckParm ("-deathmatch");
+    wart = M_CheckParm ("-wart");
+    turbo = M_CheckParm ("-turbo");
+    file[256] = M_CheckParm ("-file");
+    playdemo = M_CheckParm ("-playdemo");
+    skill = M_CheckParm ("-skill");
+    episode = M_CheckParm ("-episode");
+    timer = M_CheckParm ("-timer");
+    avg = M_CheckParm ("-avg");
+    warp = M_CheckParm ("-warp");
+    // start the apropriate game based on parms
+    record = M_CheckParm ("-record");
+    playdemo = M_CheckParm ("-playdemo");
+    // check for a driver that wants intermission stats
+    statcopy = M_CheckParm("-statcopy");
+    timedemo = M_CheckParm ("-timedemo");
+    loadgame = M_CheckParm ("-loadgame");
+        
+    FindResponseFile();
 	
     IdentifyVersionAndSelect();
 
     setbuf (stdout, NULL);
     modifiedgame = false;
-	
-    nomonsters = M_CheckParm ("-nomonsters");
-    respawnparm = M_CheckParm ("-respawn");
-    fastparm = M_CheckParm ("-fast");
-    devparm = M_CheckParm ("-devparm");
-    if (M_CheckParm ("-altdeath"))
+
+
+    if (altdeath)
 	deathmatch = 2;
-    else if (M_CheckParm ("-deathmatch"))
+    else if (deathmatch)
 	deathmatch = 1;
 
     switch ( gamemode )
@@ -1463,12 +1523,13 @@ void D_DoomMain (void)
     if (devparm)
 	scr_printf(D_DEVSTR);
     
+    
     // turbo option
-    if ( (p=M_CheckParm ("-turbo")) )
+    if (turbo)
     {
-	int     scale = 200;
-	extern int forwardmove[2];
-	extern int sidemove[2];
+	 int     scale = 200;
+	 extern int forwardmove[2];
+	 extern int sidemove[2];
 	
 	if (p<myargc-1)
 	    scale = atoi (myargv[p+1]);
@@ -1488,8 +1549,8 @@ void D_DoomMain (void)
     //
     // convenience hack to allow -wart e m to add a wad file
     // prepend a tilde to the filename so wadfile will be reloadable
-    p = M_CheckParm ("-wart");
-    if (p)
+    
+    if (wart)
     {
 	myargv[p][4] = 'p';     // big hack, change to -warp
 
@@ -1516,9 +1577,8 @@ void D_DoomMain (void)
 	}
 	D_AddFile (file);
     }
-	
-    p = M_CheckParm ("-file");
-    if (p)
+
+    if (file)
     {
 	// the parms after p are wadfile/lump names,
 	// until end of parms or another - preceded parm
@@ -1526,17 +1586,19 @@ void D_DoomMain (void)
 	while (++p != myargc && myargv[p][0] != '-')
 	    D_AddFile (myargv[p]);
     }
+    
 
-    p = M_CheckParm ("-playdemo");
 
-    if (!p)
-	p = M_CheckParm ("-timedemo");
 
-    if (p && p < myargc-1)
+    
+    if (!playdemo)
+	timedemo = M_CheckParm ("-timedemo");
+
+    if (timedemo && timedemo < myargc-1)
     {
-	sprintf (file,"%s.lmp", myargv[p+1]);
-	D_AddFile (file);
-	scr_printf("Playing demo %s.lmp.\n",myargv[p+1]);
+	  sprintf (file,"%s.lmp", myargv[p+1]);
+	  D_AddFile (file);
+	  scr_printf("Playing demo %s.lmp.\n",myargv[p+1]);
     }
     
     // get skill / episode / map from parms
@@ -1545,38 +1607,42 @@ void D_DoomMain (void)
     startmap = 1;
     autostart = false;
 
-		
-    p = M_CheckParm ("-skill");
-    if (p && p < myargc-1)
+
+    
+    if (skill && skill < myargc-1)
     {
 	startskill = myargv[p+1][0]-'1';
 	autostart = true;
     }
 
-    p = M_CheckParm ("-episode");
-    if (p && p < myargc-1)
+
+    
+    if (episode && episode < myargc-1)
     {
-	startepisode = myargv[p+1][0]-'0';
-	startmap = 1;
-	autostart = true;
+	 startepisode = myargv[p+1][0]-'0';
+	 startmap = 1;
+	 autostart = true;
     }
 	
-    p = M_CheckParm ("-timer");
-    if (p && p < myargc-1 && deathmatch)
+ 
+    
+    if (timer && timer < myargc-1 && deathmatch)
     {
-	int     time;
+	
 	time = atoi(myargv[p+1]);
 	printf("Levels will end after %d minute",time);
 	if (time>1)
 	    printf("s");
 	printf(".\n");
     }
+    
 
-    p = M_CheckParm ("-avg");
-    if (p && p < myargc-1 && deathmatch)
+    
+    if (avg && avg < myargc-1 && deathmatch)
 	printf("Austin Virtual Gaming: Levels will end after 20 minutes\n");
-
-    p = M_CheckParm ("-warp");
+    
+    
+    ;
     if (p && p < myargc-1)
     {
 	if (gamemode == commercial)
@@ -1702,10 +1768,10 @@ void D_DoomMain (void)
 
     printf ("ST_Init: Init status bar.\n");
     ST_Init ();
+    
+    
 
-    // check for a driver that wants intermission stats
-    p = M_CheckParm ("-statcopy");
-    if (p && p<myargc-1)
+    if (statcopy && statcopy<myargc-1)
     {
 	// for statistics driver
 	extern  void*	statcopy;                            
@@ -1714,32 +1780,31 @@ void D_DoomMain (void)
 	printf ("External statistics registered.\n");
     }
     
-    // start the apropriate game based on parms
-    p = M_CheckParm ("-record");
 
-    if (p && p < myargc-1)
+    if (record && record < myargc-1)
     {
-	G_RecordDemo (myargv[p+1]);
-	autostart = true;
+	  G_RecordDemo (myargv[p+1]);
+	  autostart = true;
     }
 	
-    p = M_CheckParm ("-playdemo");
-    if (p && p < myargc-1)
+    
+    if (playdemo && playdemo < myargc-1)
     {
-	singledemo = true;              // quit after one demo
-	G_DeferedPlayDemo (myargv[p+1]);
-	D_DoomLoop ();  // never returns
+ 	    singledemo = true;              // quit after one demo
+    	G_DeferedPlayDemo (myargv[p+1]);
+	    D_DoomLoop ();  // never returns
     }
 	
-    p = M_CheckParm ("-timedemo");
-    if (p && p < myargc-1)
+    
+    if (timedemo && timedemo < myargc-1)
     {
-	G_TimeDemo (myargv[p+1]);
-	D_DoomLoop ();  // never returns
+	 G_TimeDemo (myargv[p+1]);
+	 D_DoomLoop ();  // never returns
     }
 	
-    p = M_CheckParm ("-loadgame");
-    if (p && p < myargc-1)
+    
+
+    if (loadgame && loadgame < myargc-1)
     {
 	if (M_CheckParm("-cdrom"))
 	    //sprintf(file, "c:\\doomdata\\"SAVEGAMENAME"%c.dsg",myargv[p+1][0]);
