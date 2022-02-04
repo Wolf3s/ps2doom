@@ -19,10 +19,11 @@
 // DESCRIPTION:
 //	BSP traversal, handling of LineSegs for rendering.
 //
+// static const char rcsid[] = "$Id: r_bsp.c,v 1.4 1997/02/03 22:45:12 b1 Exp $";
 //-----------------------------------------------------------------------------
 
 
-// static const char rcsid[] = "$Id: r_bsp.c,v 1.4 1997/02/03 22:45:12 b1 Exp $";
+
 
 
 #include "include/doomdef.h"

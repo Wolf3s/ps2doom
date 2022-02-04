@@ -21,10 +21,11 @@
 //	Preparation of data for rendering,
 //	generation of lookups, caching, retrieval by name.
 //
+// static const chat rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 //-----------------------------------------------------------------------------
 
 
-// static const chat rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
+
 
 #ifdef __BEOS__
 #ifdef __GNUC__

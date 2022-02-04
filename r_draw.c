@@ -21,10 +21,10 @@
 //	Here find the main potential for optimization,
 //	 e.g. inline assembly, different algorithms.
 //
+// static const char rcsid[] = "$Id: r_draw.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 //-----------------------------------------------------------------------------
 
 
-// static const char rcsid[] = "$Id: r_draw.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 
 
 #include "include/doomdef.h"

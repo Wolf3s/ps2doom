@@ -19,10 +19,11 @@
 // DESCRIPTION:
 //	Handles WAD file header, directory, lump I/O.
 //
+// static const char rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 //-----------------------------------------------------------------------------
 
 
-// static const char rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
+
 
 
 #include <stdlib.h>

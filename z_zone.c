@@ -19,9 +19,10 @@
 // DESCRIPTION:
 //	Zone Memory Allocation. Neat.
 //
+// static const char rcsid[] = "$Id: z_zone.c,v 1.4 1997/02/03 16:47:58 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-// static const char rcsid[] = "$Id: z_zone.c,v 1.4 1997/02/03 16:47:58 b1 Exp $";
+
 
 #include "include/z_zone.h"
 #include "include/i_system.h"

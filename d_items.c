@@ -17,11 +17,11 @@
 // $Log:$
 //
 // DESCRIPTION:
-//
+// 
+// static const char rcsid[] = "$Id:$";
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id:$";
+
 
 // We are referring to sprite numbers.
 #include "include/info.h"

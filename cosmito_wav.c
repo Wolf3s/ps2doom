@@ -1,7 +1,7 @@
 #include <mixer/wav.h>
 
 // Note: This calls fseek, so watch out...
-int GetFilesize(FILE * fd)
+int GetFilesize(FILE *fd)
 {
 	int size;
 	fseek(fd, 0, SEEK_END);

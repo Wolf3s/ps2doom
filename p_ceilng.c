@@ -18,9 +18,10 @@
 //
 // DESCRIPTION:  Ceiling aninmation (lowering, crushing, raising)
 //
+// static const char rcsid[] = "$Id: p_ceilng.c,v 1.4 1997/02/03 16:47:53 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-// static const char rcsid[] = "$Id: p_ceilng.c,v 1.4 1997/02/03 16:47:53 b1 Exp $";
+
 
 
 #include "include/z_zone.h"

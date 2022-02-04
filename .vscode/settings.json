@@ -91,6 +91,7 @@
         "debug.h": "c",
         "type_traits": "c",
         "wav.h": "c",
-        "cstdio": "c"
+        "cstdio": "c",
+        "ctype.h": "c"
     }
 }

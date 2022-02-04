@@ -21,7 +21,8 @@
 //	plus functions to determine game mode (shareware, registered),
 //	parse command line parameters, configure game parameters (turbo),
 //	and call the startup functions.
-//
+// 
+// static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 //-----------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -31,7 +32,7 @@
 #include <kernel.h>
 #include <tamtypes.h>
 #include <string.h>
-//static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
+
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8
@@ -1423,6 +1424,7 @@ void D_DoomMain (void)
     int statcopy;
     int record;
     int loadgame;
+    int cdrom;
     char file[256];
 
     //todo: add the switch case here of psp doom 	
@@ -1448,7 +1450,7 @@ void D_DoomMain (void)
     statcopy = M_CheckParm("-statcopy");
     timedemo = M_CheckParm ("-timedemo");
     loadgame = M_CheckParm ("-loadgame");
-        
+    cdrom = M_CheckParm ("-cdrom");
     FindResponseFile();
 	
     IdentifyVersionAndSelect();
@@ -1724,7 +1726,7 @@ void D_DoomMain (void)
 	    "===========================================================================\n"
 	    "                                Open source!\n"
 	    "===========================================================================\n"
-	);
+    );
 	break;
       case registered:
       case retail:
@@ -1805,12 +1807,12 @@ void D_DoomMain (void)
 
     if (loadgame && loadgame < myargc-1)
     {
-	if (M_CheckParm("-cdrom"))
+	if (cdrom)
 	    //sprintf(file, "c:\\doomdata\\"SAVEGAMENAME"%c.dsg",myargv[p+1][0]);
         sprintf(file, "c:\\doomdata\\%s%c.dsg", currentWadName, myargv[p+1][0]);
 	else
         //sprintf(file, "mc0:PS2DOOM/"SAVEGAMENAME"%c.dsg",myargv[p+1][0]);
-        sprintf(file, "mc0:PS2DOOM/%s%c.dsg",currentWadName,myargv[p+1][0]);
+        sprintf(file, "mc0:PS2DOOM/%s%c.dsg", currentWadName, myargv[p+1][0]);
 	G_LoadGame (file);
     }
 	
