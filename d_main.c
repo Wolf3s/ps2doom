@@ -991,7 +991,6 @@ void IdentifyVersionAndSelect (void)        // cosmito
     **   parameter commands in this case it will be just the name of parmeter like int comdev; **
     **   instead of a command like M_Checkparam = ("-comdev")                                  **
     *********************************************************************************************/
-    
     int shdev;
     int regdev;
     int comdev;
@@ -1049,7 +1048,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
     if (!home)
       home = ".";
     sprintf(basedefault, "%s.doomrc", home);
-
+ 
     if (shdev)
     {
         gamemode = shareware;

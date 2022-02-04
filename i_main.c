@@ -29,7 +29,7 @@
 #include "include/m_argv.h"
 #include "include/d_main.h"
 #include "include/w_wad.h"
-#include "include/modules.h"
+
 #include <stdio.h>
 
 #include <libmc.h>
@@ -73,6 +73,49 @@ static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )
 #include <mixer/wav.h>
 #include "include/elf_structure.h"
 #include "include/pad_support.h"
+#include "include/modules.h"
+
+extern unsigned char usbd[];
+extern unsigned int size_usbd;
+
+//Declare usbhdfsd module //
+extern unsigned char usbhdfsd[];
+extern unsigned int size_usbhdfsd;
+
+extern unsigned char usbmass_bd_irx;
+extern unsigned int size_usbmass_bd_irx;
+
+extern unsigned char SJPCM[];
+extern unsigned int size_SJPCM;
+
+extern unsigned char freesd[];
+extern unsigned int size_freesd;
+
+//#ifdef PS2HDD
+/*Declare iomanX module*/
+extern unsigned char iomanX[];
+extern unsigned int size_iomanX;
+/*Declare fileXio module*/
+extern unsigned char fileXio[];
+extern unsigned int size_fileXio;
+/*Declare ps2dev9 module*/
+extern unsigned char ps2dev9[];
+extern unsigned int size_ps2dev9;
+/*Declare ps2atad module*/
+extern unsigned char ps2atad[];
+extern unsigned int size_ps2atad;
+/*Declare ps2hdd module*/
+extern unsigned char ps2hdd[];
+extern unsigned int size_ps2hdd;
+/*Declare ps2fsmodule*/
+extern unsigned char ps2fs[];
+extern unsigned int size_ps2fs;
+/*Declare poweroff module*/
+extern unsigned char poweroff[];
+extern unsigned int size_poweroff;
+/*Declare cdvd module*/
+extern unsigned char cdvd[];
+extern unsigned int size_cdvd;
 
 extern int SAMPLECOUNT = 512;
 
@@ -189,48 +232,7 @@ int getFileSize(int fd)
 	return size;
 }
 
-//Declare usbd module //
-unsigned char usbd[];
-unsigned int size_usbd;
 
-//Declare usbhdfsd module //
-unsigned char usbhdfsd[];
-unsigned int size_usbhdfsd;
-
-unsigned char usbmass_bd_irx;
-unsigned int size_usbmass_bd_irx;
-
-unsigned char SJPCM[];
-unsigned int size_SJPCM;
-
-unsigned char freesd[];
-unsigned int size_freesd;
-
-//#ifdef PS2HDD
-/*Declare iomanX module*/
-unsigned char iomanX[];
-unsigned int size_iomanX;
-/*Declare fileXio module*/
-unsigned char fileXio[];
-unsigned int size_fileXio;
-/*Declare ps2dev9 module*/
-unsigned char ps2dev9[];
-unsigned int size_ps2dev9;
-/*Declare ps2atad module*/
-unsigned char ps2atad[];
-unsigned int size_ps2atad;
-/*Declare ps2hdd module*/
-unsigned char ps2hdd[];
-unsigned int size_ps2hdd;
-/*Declare ps2fsmodule*/
-unsigned char ps2fs[];
-unsigned int size_ps2fs;
-/*Declare poweroff module*/
-unsigned char poweroff[];
-unsigned int size_poweroff;
-/*Declare cdvd module*/
-unsigned char cdvd[];
-unsigned int size_cdvd;
 //#endif
 char config_probestring[200];
 
@@ -598,53 +600,3 @@ int main( int argc, char**	argv )
 
     return 0;
 } 
-
-
-
-/* fix this error regarding extern char´s
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: i_main.o: in function `SDL_main':
-(.text+0x250): undefined reference to `size_freesd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x254): undefined reference to `freesd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x264): undefined reference to `size_freesd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x26c): undefined reference to `freesd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x284): undefined reference to `size_SJPCM'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x288): undefined reference to `SJPCM'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x298): undefined reference to `size_SJPCM'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2a0): undefined reference to `SJPCM'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2a4): undefined reference to `size_usbd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2a8): undefined reference to `usbd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2b8): undefined reference to `size_usbd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2c0): undefined reference to `usbd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2c4): undefined reference to `size_usbhdfsd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2c8): undefined reference to `usbhdfsd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2d8): undefined reference to `size_usbhdfsd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x2e0): undefined reference to `usbhdfsd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x86c): undefined reference to `size_poweroff'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x870): undefined reference to `poweroff'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x880): undefined reference to `size_poweroff'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x888): undefined reference to `poweroff'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x88c): undefined reference to `size_iomanX'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x890): undefined reference to `iomanX'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8a0): undefined reference to `size_iomanX'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8a8): undefined reference to `iomanX'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8ac): undefined reference to `size_fileXio'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8b0): undefined reference to `fileXio'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8c0): undefined reference to `size_fileXio'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8c8): undefined reference to `fileXio'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8cc): undefined reference to `size_ps2dev9'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8d0): undefined reference to `ps2dev9'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8e0): undefined reference to `size_ps2dev9'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8e8): undefined reference to `ps2dev9'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8ec): undefined reference to `size_ps2atad'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x8f0): undefined reference to `ps2atad'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x900): undefined reference to `size_ps2atad'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x908): undefined reference to `ps2atad'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x90c): undefined reference to `size_ps2hdd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x914): undefined reference to `ps2hdd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x924): undefined reference to `size_ps2hdd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x92c): undefined reference to `ps2hdd'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x93c): undefined reference to `size_ps2fs'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x944): undefined reference to `ps2fs'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x954): undefined reference to `size_ps2fs'
-/usr/local/ps2dev/ee/lib/gcc/mips64r5900el-ps2-elf/11.2.0/../../../../mips64r5900el-ps2-elf/bin/ld: (.text+0x95c): undefined reference to `ps2fs'
-*/
