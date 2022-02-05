@@ -22,23 +22,14 @@
 // static const char rcsid[] = "$Id: i_main.c,v 1.4 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-
+#define WIDTH 640
+#define HEIGHT 448
 
 #include <SDL/SDL.h>
-
-#include "include/doomdef.h"
-#include "include/m_argv.h"
-#include "include/d_main.h"
-#include "include/w_wad.h"
-
 #include <stdio.h>
-
 #include <libmc.h>
-
 #include <libconfig.h>
-
 #include <sifrpc.h>
-
 #include <debug.h>
 #include <libhdd.h>
 #include <libpwroff.h>
@@ -57,8 +48,6 @@
 #include <iopheap.h>
 
 
-//#endif
-
 #define MAX_PARTITIONS   100
 
 static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )   ) = "rom0:UDNL rom0:EELOADCNF";
@@ -75,6 +64,11 @@ static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )
 #include "include/elf_structure.h"
 #include "include/pad_support.h"
 #include "include/modules.h"
+
+#include "include/doomdef.h"
+#include "include/m_argv.h"
+#include "include/d_main.h"
+#include "include/w_wad.h"
 
 extern unsigned char usbd[];
 extern unsigned int size_usbd;
@@ -163,7 +157,7 @@ config_buttons_element config_buttons[] =
     {"r1", "fire"},
     {"l2", "y"},
     {"r2", "open"},
-    {"l3", ""},
+    {"l3", ""}, /// TBD : yet not used
     {"r3", "gamma"},
     {"dpadleft", "leftarrow"},
     {"dpadright", "rightarrow"},
@@ -285,6 +279,35 @@ int main( int argc, char**	argv )
     GetElfFilename(argv[0], deviceName, fullPath, elfFilename);
     main_thread_id = GetThreadId();
 	
+     SDL_Init(SDL_INIT_VIDEO);
+  
+     SDL_Surface *surface;
+  
+     SDL_Surface *window;
+
+     window = SDL_SetVideoMode(WIDTH, HEIGHT, 32, SDL_SWSURFACE);
+
+     surface = SDL_LoadBMP("gfx/ps2doom.bmp");
+
+     //SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+
+     //Apply image to screen
+     SDL_BlitSurface( surface, NULL, window, NULL );
+
+ 
+      SDL_Flip(window);
+    
+      SDL_Delay(4000);
+    
+      SDL_FreeSurface(surface);
+
+      SDL_Quit();
+    
+
+      printf("error");
+    
+
+
     SifInitRpc(0); 
         
     init_scr();
@@ -560,7 +583,7 @@ int main( int argc, char**	argv )
         
         if( mountErr < 0 )
         {
-            printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
+            //printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
             scr_printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
             SleepThread();
         }

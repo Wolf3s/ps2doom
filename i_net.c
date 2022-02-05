@@ -55,7 +55,6 @@
 #include <errno.h>
 #include <ps2ip.h>
 #include "include/i_ps2net.h"
-#include <math.h>
 #define IPPORT_USERRESERVED	1024 // ??
 #include "include/i_system.h"
 #include "include/d_event.h"
@@ -253,8 +252,12 @@ void PacketGet (void)
 	netbuffer->cmds[c].buttons = sw.cmds[c].buttons;
     }
 }
+//wip
+int gethostname(char *name, int len)
+{
 
-
+	return -1;
+}
 
 int GetLocalAddress (void)
 {

@@ -92,5 +92,10 @@ run:
 reset:
 	ps2client reset
 
+# taken from tyra engine examples
+pcsx2:
+	taskkill.exe /f /t /im pcsx2.exe || true
+	$(WSL_LINUX_PCSX2)/pcsx2.exe --elf=$(WSL_MAKE_WINDOWS)\\root\\ps2doom\\$(DIR_NAME)\\bin\\$(EE_BIN)
+
 include $(PS2SDK)/samples/Makefile.pref
 include $(PS2SDK)/samples/Makefile.eeglobal

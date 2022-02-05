@@ -19,7 +19,7 @@ static int MIXER_BUFSIZE;
 //extern int m_mixer_playing;
 extern int count;
 
-static int debug1;
+//static int debug1;
 
 extern sint16 *s1, *s2;
 static channel channels[_MIXER_MAXCHANNELS];

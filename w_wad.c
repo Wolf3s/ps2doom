@@ -503,10 +503,9 @@ W_ReadLump
        
 
 	//// Hack to make I/O quicker	
-	//ps2_fseek (handle, l->position, SEEK_SET);
- //   c = ps2_fread (dest, 1, l->size, handle);
+	// ps2_fseek (handle, l->position, SEEK_SET);
+    //   c = ps2_fread (dest, 1, l->size, handle);
 
-		
     fseek (handle, l->position, SEEK_SET);
     c = fread (dest, 1, l->size, handle);
 	

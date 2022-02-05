@@ -136,5 +136,7 @@ extern int mmus2mid(const UBYTE *mus,MIDI *mid, UWORD division, int nocomp);
 extern void free_mididata(MIDI *mid);
 extern int MIDIToMidi(MIDI *mididata,UBYTE **mid,int *midlen);
 extern int MidiToMIDI(UBYTE *mid,MIDI *mididata);
+static void FreeTracks(MIDI *mididata);
+static void TWriteLength(UBYTE **midiptr,ULONG length);
 
 #endif

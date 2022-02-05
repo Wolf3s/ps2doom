@@ -80,9 +80,7 @@ void I_BeginRead(void)
         memcpy(screenloc, disk_image + y * disk_image_w, disk_image_w);
     }
 
-    SDL_UpdateRect(screen, 
-                   screen->w - disk_image_w, screen->h - disk_image_h, 
-                   disk_image_w, disk_image_h);
+    SDL_UpdateRect(screen, screen->w - disk_image_w, screen->h - disk_image_h, disk_image_w, disk_image_h);
 }
 
 void I_EndRead(void)
@@ -104,9 +102,7 @@ void I_EndRead(void)
         memcpy(screenloc, saved_background + y * disk_image_w, disk_image_w);
     }
 
-    SDL_UpdateRect(screen, 
-                   screen->w - disk_image_w, screen->h - disk_image_h, 
-                   disk_image_w, disk_image_h);
+    SDL_UpdateRect(screen, screen->w - disk_image_w, screen->h - disk_image_h, disk_image_w, disk_image_h);
 }
 
 static void LoadDiskImage(void)

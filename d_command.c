@@ -1,4 +1,4 @@
-
+#include <string.h>
 #include "include/s_sound.h"
 #include "include/d_main.h"
 
@@ -14,10 +14,10 @@ void ps2_do_cheat(int cheat)
 
     switch (cheat)
     {
-           case 1: // God Mode
+       case 1: // God Mode
 	   str = "iddqd";		
 	   break;		
-           case 2: // Good fucking arsenal
+       case 2: // Good fucking arsenal
 	   str = "idfa";		
 	   break;
 	   case 3: // Key Full Ammo	
@@ -40,7 +40,7 @@ void ps2_do_cheat(int cheat)
 	   case 9:  // Invisibility Power-Up
 	   str = "idbeholdi";		
 	   break;
-           case 10: //Automap Power-up      
+       case 10: //Automap Power-up      
 	   str = "idbeholda";		
 	   break;
 	   case 11: //Anti-Radiation Suit Power-up     
@@ -50,11 +50,10 @@ void ps2_do_cheat(int cheat)
 	   str = "idbeholdl";
 	   break;
 	   case 13: 
-	   str = "no_sound"; //Deactivates thesound
+	   str = "no_sound"; //Deactivates the sound
           // wip SjPCM_Pause()
 	   return;
-           break;
-	   
+           break; 
 	   case 14: 
 	   str = "no_music";
            S_StopMusic();
@@ -62,7 +61,7 @@ void ps2_do_cheat(int cheat)
 	   break;
 	   
 
-       }
+    }
 
     for (i=0; i<strlen(str); i++) 
     { 

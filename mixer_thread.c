@@ -16,7 +16,7 @@ static ee_sema_t   thread_playsema;
 static int         thread_threadid;
 
 extern s32 main_thread_id;
-
+s32 mixer_VRstartID = 0;
 ///
 void Mixer_StartThread()
 {
@@ -47,7 +47,7 @@ void Mixer_StartThread()
 	StartThread(thread_threadid, NULL);
 }
 
-s32 mixer_VRstartID = 0;
+
 
 //  DO NOT CALL THIS - this is the vblank handler function
 int Mixer_Tick_IntHandler(int cause)
