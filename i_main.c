@@ -285,26 +285,27 @@ int main( int argc, char**	argv )
   
      SDL_Surface *window;
 
-     window = SDL_SetVideoMode(WIDTH, HEIGHT, 32, SDL_SWSURFACE);
+    window = SDL_SetVideoMode(WIDTH, HEIGHT, 32, SDL_SWSURFACE);
 
-     surface = SDL_LoadBMP("gfx/ps2doom.bmp");
+    surface = SDL_LoadBMP("gfx/ps2doom.bmp");
+    
 
-     //SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
 
      //Apply image to screen
-     SDL_BlitSurface( surface, NULL, window, NULL );
+    SDL_BlitSurface( surface, NULL, window, NULL );
 
  
-      SDL_Flip(window);
+    SDL_Flip(window);
     
-      SDL_Delay(4000);
+    SDL_Delay(4000);
     
-      SDL_FreeSurface(surface);
+    SDL_ShowCursor(SDL_DISABLE);
 
-      SDL_Quit();
+    SDL_FreeSurface(surface);
+
+    SDL_Quit();
     
 
-      printf("error");
     
 
 

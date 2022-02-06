@@ -94,6 +94,7 @@
         "cstdio": "c",
         "ctype.h": "c",
         "i_ps2net.h": "c",
-        "info.h": "c"
+        "info.h": "c",
+        "sdl_image.h": "c"
     }
 }

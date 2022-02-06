@@ -3,6 +3,7 @@
 
 #include <tcpip.h>
 #include <math.h>
+
 int gethostname(char *name, int len);
 
 u32 inet_addr(const char *cp);

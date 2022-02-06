@@ -1427,7 +1427,7 @@ void D_DoomMain (void)
     int cdrom;
     char file[256];
 
-    //todo: add the switch case here of psp doom 	
+    //todo: add the switch case of pspdoom here 
     nomonsters = M_CheckParm ("-nomonsters");
     respawn = M_CheckParm ("-respawn");
     fastparm = M_CheckParm ("-fast");
@@ -1522,7 +1522,7 @@ void D_DoomMain (void)
     scr_printf ("%s\n",title);
 
     if (devparm)
-	scr_printf(D_DEVSTR);
+	printf(D_DEVSTR);
     
     
     // turbo option
@@ -1599,7 +1599,7 @@ void D_DoomMain (void)
     {
 	  sprintf (file,"%s.lmp", myargv[p+1]);
 	  D_AddFile (file);
-	  scr_printf("Playing demo %s.lmp.\n",myargv[p+1]);
+	  printf("Playing demo %s.lmp.\n",myargv[p+1]);
     }
     
     // get skill / episode / map from parms
@@ -1657,7 +1657,7 @@ void D_DoomMain (void)
     }
     
     // init subsystems
-    scr_printf ("V_Init: allocate screens.\n");
+    printf ("V_Init: allocate screens.\n");
     V_Init ();
 
 	#ifdef _EE
@@ -1665,13 +1665,13 @@ void D_DoomMain (void)
 	#endif
 
 
-    scr_printf ("M_LoadDefaults: Load system defaults.\n");
+    printf ("M_LoadDefaults: Load system defaults.\n");
     M_LoadDefaults ();              // load before initing other systems
 
-    scr_printf ("Z_Init: Init zone memory allocation daemon. \n");
+    printf ("Z_Init: Init zone memory allocation daemon. \n");
     Z_Init ();
 
-    scr_printf ("W_Init: Init WADfiles.\n");
+    printf ("W_Init: Init WADfiles.\n");
 
 
     W_InitMultipleFiles (wadfiles);
@@ -1743,11 +1743,12 @@ void D_DoomMain (void)
 	// Ouch.
 	break;
     }
-
-    scr_printf ("M_Init: Init miscellaneous info.\n");
+    
+    //this useless for the newgui
+    printf ("M_Init: Init miscellaneous info.\n");
     M_Init ();
 
-    scr_printf ("R_Init: Init DOOM refresh daemon - ");
+    printf ("R_Init: Init DOOM refresh daemon - ");
     R_Init ();
 
     printf ("\nP_Init: Init Playloop state.\n");
