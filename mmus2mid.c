@@ -76,18 +76,6 @@
 
 // event types
 
-typedef enum
-{
-	RELEASE_NOTE,
-	PLAY_NOTE,
-	BEND_NOTE,
-	SYS_EVENT,
-	CNTL_CHANGE,
-	UNKNOWN_EVENT1,
-	SCORE_END,
-	UNKNOWN_EVENT2,
-} mus_event_t;
-
 
 // static routine prototypes
 

@@ -2,7 +2,6 @@
 #include "include/s_sound.h"
 #include "include/d_main.h"
 
-
 /****************************************************************************
 ** ps2doom cheat support - code typing and command line
 *****************************************************************************/

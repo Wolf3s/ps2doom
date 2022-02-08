@@ -35,7 +35,7 @@
 #ifdef __GNUG__
 #pragma interface
 #endif
-
+#include "sounds.h"
 //
 // Initializes sound stuff, including volume
 // Sets channels, SFX and music volume,
@@ -90,6 +90,17 @@ extern int numChannels;
 
 //jff 3/17/98 holds last IDMUS number, or -1
 extern int idmusnum;
+
+typedef struct
+{
+  sfxinfo_t *sfxinfo;
+
+  void *origin;	
+
+  int handle;
+  
+  int is_pickup;
+} channel_t;
 
 #endif
 

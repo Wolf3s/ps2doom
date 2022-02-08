@@ -35,8 +35,9 @@
 typedef struct
 {
     // Should be "IWAD" or "PWAD".
-    char		identification[4];		
-    int			numlumps;
+    char                identification[4];
+
+    int                 numlumps;
     int			infotableofs;
     
 } wadinfo_t;

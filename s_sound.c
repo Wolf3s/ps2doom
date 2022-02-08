@@ -45,7 +45,6 @@
 #include "include/w_wad.h"
 //#include "lprintf.h"   // cosmito
 
-
 #include <stdlib.h>
 // when to clip out sounds
 // Does not fit the large outdoor areas.
@@ -69,15 +68,6 @@
 extern int snd_card, mus_card;
 extern boolean nosfxparm, nomusicparm;
 //jff end sound enabling variables readable here
-
-typedef struct
-{
-	sfxinfo_t *sfxinfo;  // sound information (if null, channel avail.)
-	void *origin;        // origin of sound
-	int handle;          // handle of the sound being played
-	int is_pickup;       // killough 4/25/98: whether sound is a player's weapon
-} channel_t;
-
 // the set of channels available
 static channel_t *channels;
 

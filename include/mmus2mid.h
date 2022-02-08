@@ -124,6 +124,18 @@ static UBYTE miditempo[] ={0x00,0xff,0x51,0x03,0x09,0xa3,0x1a}; // uS/qnote
 static UBYTE midihdr[] ={'M','T','h','d',0,0,0,6,0,1,0,0,0,0}; // header length 6, format 1
 static UBYTE trackhdr[] ={'M','T','r','k'}; //track header
 
+//event types
+typedef enum
+{
+    RELEASE_NOTE,
+    PLAY_NOTE,
+    BEND_NOTE,
+    SYS_EVENT,
+    CNTL_CHANGE,
+    UNKNOWN_EVENT1,
+    SCORE_END,
+    UNKNOWN_EVENT2
+} mus_event_t;
 
 static int TWriteByte(MIDI *mididata, int MIDItrack, UBYTE byte);
 static int TWriteVarLen(MIDI *mididata, int MIDItrack, register ULONG value);

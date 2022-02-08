@@ -22,8 +22,6 @@
 // static const char rcsid[] = "$Id: i_main.c,v 1.4 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-#define WIDTH 640
-#define HEIGHT 448
 
 #include <SDL/SDL.h>
 #include <stdio.h>
@@ -219,7 +217,6 @@ char config_probestring[200];
 
 const char *hdd_wads_folder;
 
-
 int getFileSize(int fd) 
 {
 	int size = fseek(fd, 0, SEEK_END);
@@ -227,6 +224,51 @@ int getFileSize(int fd)
 	return size;
 }
 
+void Display_Pal()
+{
+    #define WIDTH 480
+    #define HEIGHT 576
+    #define BITS 32
+    
+    int forceDisplayMode = -1;
+    int argc; 
+    int PAL;
+    char**	argv; 
+    myargc = argc; 
+    myargv = argv; 
+    
+    SDL_Surface *window;
+    
+    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_SWSURFACE);
+    
+    PAL = window;
+    if (PAL)
+    {
+     SDL_Flip(window);
+    
+     SDL_ShowCursor(SDL_DISABLE);
+
+     SDL_Quit();
+    }
+    else
+        PS2SDL_ForceSignal(1);
+
+    // Changes accordingly to filename
+    forceDisplayMode = getDisplayModeFromELFName(argv);
+    if (forceDisplayMode != -1)
+        PS2SDL_ForceSignal(forceDisplayMode);
+
+    // Sets SAMPLECOUNT accordingly to system
+    if (PAL == 1)
+        SAMPLECOUNT = 960;
+    else
+        SAMPLECOUNT = 800;
+
+
+    D_DoomMain (); 
+
+    return 0;
+}
 
 //#endif
 char config_probestring[200];
@@ -249,7 +291,7 @@ void ResetIOP()
 	SifInitIopHeap();
 }
 
-//main
+//int main
 int main( int argc, char**	argv ) 
 {
     FILE *fp;
@@ -269,7 +311,6 @@ int main( int argc, char**	argv )
     const char *hdd_path_to_partition;
     use_hdd = CONFIG_FALSE;
     int handle;
-    int forceDisplayMode = -1;
     myargc = argc; 
     myargv = argv; 
     s32 main_thread_id;
@@ -279,25 +320,25 @@ int main( int argc, char**	argv )
     GetElfFilename(argv[0], deviceName, fullPath, elfFilename);
     main_thread_id = GetThreadId();
 	
-     SDL_Init(SDL_INIT_VIDEO);
-  
-     SDL_Surface *surface;
-  
-     SDL_Surface *window;
+    #define WIDTH 640
+    #define HEIGHT 448
+    #define BITS 32
 
-    window = SDL_SetVideoMode(WIDTH, HEIGHT, 32, SDL_SWSURFACE);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+  
+    SDL_Surface *surface;
+  
+    SDL_Surface *window;
+
+    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
 
     surface = SDL_LoadBMP("gfx/ps2doom.bmp");
     
-
-
-     //Apply image to screen
     SDL_BlitSurface( surface, NULL, window, NULL );
 
- 
     SDL_Flip(window);
     
-    SDL_Delay(4000);
+    SDL_Delay(6000);
     
     SDL_ShowCursor(SDL_DISABLE);
 
@@ -305,18 +346,16 @@ int main( int argc, char**	argv )
 
     SDL_Quit();
     
-
-    
-
-
     SifInitRpc(0); 
-        
-    init_scr();
-    scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");
-    scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");
-    scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic");
-    scr_clear();
-
+/*      
+*************************************************************************************************************************************************   
+**    init_scr();                                                                                                                              **
+**    scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");                                                                                      **
+**    scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");                                 **
+**    scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic"); **
+**    scr_clear();                                                                                                                             **
+*************************************************************************************************************************************************
+*/
     printf("sample: kicking IRXs\n");
 	
     //ret = SifLoadModule("rom0:LIBSD", 0, NULL);
@@ -493,7 +532,7 @@ int main( int argc, char**	argv )
             }
             else
             {
-                printf("found: %s = %s\n", config_probestring, hdd_wads_folder);
+		printf("found: %s = %s\n", config_probestring, hdd_wads_folder);
             }
         }
 
@@ -601,8 +640,8 @@ int main( int argc, char**	argv )
     Mixer_Init();       // TBD : arg number channels
 
     return 0;
-    
-    // Until sdl isn't fixed
+    /*
+        // Until sdl isn't fixed
     int PAL = detect_signal();
     if (PAL == 1)
         PS2SDL_ForceSignal(0);
@@ -624,4 +663,6 @@ int main( int argc, char**	argv )
     D_DoomMain (); 
 
     return 0;
+   */ 
+   Display_Pal();
 } 

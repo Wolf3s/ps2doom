@@ -971,7 +971,7 @@ void checkForWadFile(char* wadname, char** foundwadfiles, char* foundfile, int* 
     }
 }
 
-void IdentifyVersionAndSelect (void)        // cosmito
+void IdentifyVersionAndSelect(void)        // cosmito
 {
     char*	doom1wad;
     char*	doomwad;
@@ -1150,7 +1150,7 @@ void IdentifyVersionAndSelect (void)        // cosmito
     }
 
     //TBD: Change this to other place 
-    scr_printf("Point to a WAD with 'dpad Up' and 'dpad Up' and select with 'X' or 'O'\n");
+    //scr_printf("Point to a WAD with 'dpad Up' and 'dpad Up' and select with 'X' or 'O'\n");
     
     int ymin = 6, nWadsFound = 0;
     int y = ymin;
@@ -1174,7 +1174,8 @@ void IdentifyVersionAndSelect (void)        // cosmito
     if (nWadsFound > 0)
     {
         scr_setXY(0,y);
-        scr_setCursor("->");
+      //scr_setCursor("->");
+
 
         int butres = 0;
         u32 old_pad = 0;
@@ -1195,23 +1196,23 @@ void IdentifyVersionAndSelect (void)        // cosmito
 
             if(butres == PAD_UP)
             {
-                scr_setXY(0,y);
-                scr_setCursor("");
+             // scr_setXY(0,y);
+             // scr_setCursor("");
                 y--;
                 if(y < ymin)
                     y = ymin;
-                scr_setXY(0,y);
-                scr_printf("->");
+              //scr_setXY(0,y);
+              //scr_printf("->");
             }
             else if(butres == PAD_DOWN)
             {
-                scr_setXY(0,y);
-                scr_setCursor("");
+               //scr_setXY(0,y);
+               //scr_setCursor("");
                 y++;
                 if(y > ymax)
                     y = ymax;
-                scr_setXY(0,y);
-                scr_printf("->");
+               //scr_setXY(0,y);
+               //scr_printf("->");
             }
             else if(butres == PAD_CROSS || butres == PAD_CIRCLE)
             {
@@ -1223,8 +1224,8 @@ void IdentifyVersionAndSelect (void)        // cosmito
                 timeout--;
         }
 
-        scr_setXY(0,ymax+1);
-        scr_printf("\n\n");
+       // scr_setXY(0,ymax+1);
+       // scr_printf("\n\n");
         padPortClose(port, slot);
 
         // find out which wad selected
@@ -1711,7 +1712,7 @@ void D_DoomMain (void)
     "     License. However WITHOUT ANY WARRANTY even the implied warranty of      "
     "     FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License for more details.\n"
     "     You are welcome to change and distribute but you can´t sell comercially.\n"
-    "     See the source for more information.\n                                    "                                                                 
+    "     See the License for more information.\n                                    "                                                                 
 	"=============================================================================\n");
 	
     getchar ();
@@ -1735,7 +1736,7 @@ void D_DoomMain (void)
 	    "===========================================================================\n"
 	    "         Open source product - you can do distributions or modify the code!\n"
 	    "         However you cannot comercialy sell the product                      "
-        "         as in the terms of the doom license\n                               "
+        "         as in the terms of the DOOM Source Code License\n                   "
 	    "===========================================================================\n");
 	break;
 	
