@@ -9,9 +9,10 @@ extern double pow (double a, double b)
 	return powf(a,b);
 }
 
+/*
 void setbuf(FILE *__restrict, char *__restrict)
 {
 
 }
-
+*/
 

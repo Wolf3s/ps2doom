@@ -311,10 +311,11 @@ void W_InitMultipleFiles (char** filenames)
     if (!numlumps)
 	//I_Error ("W_InitFiles: no files found");
     {
-        scr_clear();
+        //scr_clear();
         //scr_printf ("\n\nERROR at W_InitFiles: no files found\n\n");
         printf (" Put a .WAD file along with PS2Doom.elf before running it or check if HDD paths are correct at ps2doom.config.\n\n");
-        SleepThread();
+        //SleepThread();
+        
     }
     
     // set up caching
@@ -421,7 +422,6 @@ int W_GetNumForName (char* name)
       
     return i;
 }
-
 
 //
 // W_LumpLength

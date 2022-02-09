@@ -226,22 +226,31 @@ int getFileSize(int fd)
 
 void Display_Pal()
 {
-    #define WIDTH 480
-    #define HEIGHT 576
-    #define BITS 32
+    #define PAL_WIDTH 480
+    #define PAL_HEIGHT 576
+    #define PAL_BITS 32
     
+    #define NTSC_WIDTH 640
+    #define NTSC_HEIGHT 480
+    #define NTSC_BITS 32
+
     int forceDisplayMode = -1;
     int argc; 
     int PAL;
-    char**	argv; 
+    int NTSC;
+    char** argv; 
     myargc = argc; 
     myargv = argv; 
-    
     SDL_Surface *window;
+    SDL_Surface *screen;
     
-    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_SWSURFACE);
+    window = SDL_SetVideoMode(PAL_WIDTH, PAL_HEIGHT, PAL_BITS, SDL_SWSURFACE);
     
-    PAL = window;
+    screen = SDL_SetVideoMode(NTSC_WIDTH, NTSC_HEIGHT, NTSC_BITS, SDL_SWSURFACE);
+
+    PAL = window;   
+    NTSC = screen;
+
     if (PAL)
     {
      SDL_Flip(window);
@@ -250,9 +259,23 @@ void Display_Pal()
 
      SDL_Quit();
     }
-    else
-        PS2SDL_ForceSignal(1);
+    
+    
+    else if(NTSC)
+    {
+      SDL_Flip(screen);
 
+      SDL_ShowCursor(SDL_DISABLE);
+
+      SDL_Quit();
+    }
+
+    else 
+    {
+        PS2SDL_ForceSignal(1);
+	printf("error");
+    }
+    //TBD: Force display here too but i can't do it right now. shit!!!
     // Changes accordingly to filename
     forceDisplayMode = getDisplayModeFromELFName(argv);
     if (forceDisplayMode != -1)
@@ -263,7 +286,6 @@ void Display_Pal()
         SAMPLECOUNT = 960;
     else
         SAMPLECOUNT = 800;
-
 
     D_DoomMain (); 
 
@@ -289,6 +311,234 @@ void ResetIOP()
         SifInitRpc(0);
         ResetIOP();
 	SifInitIopHeap();
+}
+
+int waitPadReady(int port, int slot) 
+{
+    int state;
+    int lastState;
+    char stateString[16];
+
+    state = padGetState(port, slot);
+    lastState = -1;
+    while((state != PAD_STATE_STABLE) && (state != PAD_STATE_FINDCTP1)) {
+        if (state != lastState) {
+            padStateInt2String(state, stateString);
+            printf("Please wait, pad(%d,%d) is in state %s\n", 
+                       port, slot, stateString);
+        }
+        lastState = state;
+        state=padGetState(port, slot);
+    }
+    // Were the pad ever 'out of sync'?
+    if (lastState != -1) {
+        printf("Pad OK!\n");
+    }
+    return 0;
+
+}
+
+int initializePad(int port, int slot) 
+{
+    int ret;
+    int modes;
+    int i;
+
+    waitPadReady(port, slot);
+
+    // How many different modes can this device operate in?
+    // i.e. get # entrys in the modetable
+    modes = padInfoMode(port, slot, PAD_MODETABLE, -1);
+    printf("The device has %d modes\n", modes);
+
+    if (modes > 0) {
+        printf("( ");
+        for (i = 0; i < modes; i++) {
+            printf("%d ", padInfoMode(port, slot, PAD_MODETABLE, i));
+        }
+        printf(")");
+    }
+
+    printf("It is currently using mode %d\n", 
+               padInfoMode(port, slot, PAD_MODECURID, 0));
+
+    // If modes == 0, this is not a Dual shock controller 
+    // (it has no actuator engines)
+    if (modes == 0) {
+        printf("This is a digital controller?\n");
+        return 1;
+    }
+
+    // Verify that the controller has a DUAL SHOCK mode
+    i = 0;
+    do {
+        if (padInfoMode(port, slot, PAD_MODETABLE, i) == PAD_TYPE_DUALSHOCK)
+            break;
+        i++;
+    } while (i < modes);
+    if (i >= modes) {
+        printf("This is no Dual Shock controller\n");
+        return 1;
+    }
+
+    // If ExId != 0x0 => This controller has actuator engines
+    // This check should always pass if the Dual Shock test above passed
+    ret = padInfoMode(port, slot, PAD_MODECUREXID, 0);
+    if (ret == 0) {
+        printf("This is no Dual Shock controller??\n");
+        return 1;
+    }
+
+    printf("Enabling dual shock functions\n");
+
+    // When using MMODE_LOCK, user cant change mode with Select button
+    padSetMainMode(port, slot, PAD_MMODE_DUALSHOCK, PAD_MMODE_LOCK);
+
+    waitPadReady(port, slot);
+    printf("infoPressMode: %d\n", padInfoPressMode(port, slot));
+
+    waitPadReady(port, slot);        
+    printf("enterPressMode: %d\n", padEnterPressMode(port, slot));
+
+    waitPadReady(port, slot);
+    actuators = padInfoAct(port, slot, -1, 0);
+    printf("# of actuators: %d\n",actuators);
+
+    if (actuators != 0) {
+        actAlign[0] = 0;   // Enable small engine
+        actAlign[1] = 1;   // Enable big engine
+        actAlign[2] = 0xff;
+        actAlign[3] = 0xff;
+        actAlign[4] = 0xff;
+        actAlign[5] = 0xff;
+
+        waitPadReady(port, slot);
+        printf("padSetActAlign: %d\n", 
+                   padSetActAlign(port, slot, actAlign));
+    }
+    else {
+        printf("Did not find any actuators.\n");
+    }
+
+    waitPadReady(port, slot);
+
+    return 1;
+}
+
+int padUtils_ReadButtonWait(int port, int slot, u32 old_pad, u32 new_pad)
+{
+    int butres = 0, read = 0;
+    read = padUtils_ReadButton(port, slot, old_pad, new_pad);
+
+    if(read != 0)
+    {
+        butres = read;      // memorize pressed button
+        while (padUtils_ReadButton(port, slot, old_pad, new_pad) != 0) {};
+    }
+    return butres;
+}
+
+int padUtils_ReadButton(int port, int slot, u32 old_pad, u32 new_pad)
+{
+    struct padButtonStatus buttons;
+    int ret;
+    u32 paddata;
+
+    ret = padRead(port, slot, &buttons);
+    if (ret != 0)
+    {
+        paddata = 0xffff ^ buttons.btns;
+        
+        new_pad = paddata & ~old_pad;
+        old_pad = paddata;
+        
+
+        if (new_pad & PAD_LEFT)
+        {
+            //LEFT
+            return(PAD_LEFT);
+        }
+        if (new_pad & PAD_DOWN)
+        {
+            //DOWN
+            return(PAD_DOWN);
+        }
+        if (new_pad & PAD_RIGHT)
+        {
+            //RIGHT
+            return(PAD_RIGHT);
+        }
+        if (new_pad & PAD_UP)
+        {
+            //UP
+            return(PAD_UP);
+        }
+        if (new_pad & PAD_START)
+        {
+            //START
+            return(PAD_START);
+        }
+        if (new_pad & PAD_R3)
+        {
+            //R3
+            return(PAD_R3);
+        }
+        if (new_pad & PAD_L3)
+        {
+            //L3
+            return(PAD_L3);
+        }
+        if (new_pad & PAD_SELECT)
+        {
+            //SELECT
+            return(PAD_SELECT);
+        }
+        if (new_pad & PAD_SQUARE)
+        {
+            //SQUARE
+            return(PAD_SQUARE);
+        }
+        if (new_pad & PAD_CROSS)
+        {
+            //CROSS
+            return(PAD_CROSS);
+        }
+        if (new_pad & PAD_CIRCLE)
+        {
+            //CIRCLE
+            return(PAD_CIRCLE);
+        }
+        if (new_pad & PAD_TRIANGLE)
+        {
+            //TRIANGLE
+            return(PAD_TRIANGLE);
+        }
+        if (new_pad & PAD_R1)
+        {
+            //R1
+            return(PAD_R1);
+        }
+        if (new_pad & PAD_L1)
+        {
+            //L1
+            return(PAD_L1);
+        }
+        if (new_pad & PAD_R2)
+        {
+            //R2
+            return(PAD_R2);
+        }
+        if (new_pad & PAD_L2)
+        {
+            //L2
+            return(PAD_L2);
+        }
+    }
+    else
+        return -1;
+    
+ 
+    return 0;   // 0 means no button was pressed
 }
 
 //int main
@@ -320,16 +570,20 @@ int main( int argc, char**	argv )
     GetElfFilename(argv[0], deviceName, fullPath, elfFilename);
     main_thread_id = GetThreadId();
 	
+
+    SDL_Init(SDL_INIT_VIDEO);
+  
+    SDL_Surface *surface;
+  
+    SDL_Surface *window;
+    
+     //Apply image to screen
     #define WIDTH 640
     #define HEIGHT 448
     #define BITS 32
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
   
-    SDL_Surface *surface;
-  
-    SDL_Surface *window;
-
     window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
 
     surface = SDL_LoadBMP("gfx/ps2doom.bmp");
@@ -390,10 +644,12 @@ int main( int argc, char**	argv )
 		SleepThread();
 	}
 	if(mcInit(MC_TYPE_XMC) < 0) {
-		printf("Failed to initialise memcard server!\n");
+		printf("Failed to initialize memcard server!\n");
 		SleepThread();
 	}
-	// Since this is the first call, -1 should be returned.
+	
+    
+    // Since this is the first call, -1 should be returned.
 	mcGetInfo(0, 0, &mc_Type, &mc_Free, &mc_Format); 
 	mcSync(0, NULL, &ret);
 	printf("mcGetInfo returned %d\n",ret);
@@ -666,3 +922,5 @@ int main( int argc, char**	argv )
    */ 
    Display_Pal();
 } 
+
+
