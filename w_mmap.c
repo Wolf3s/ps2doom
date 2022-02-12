@@ -1,10 +1,10 @@
 /*****************************************************
 ****************************************************** 
 ** TBD:                                             **       
-** PT:BR Verrificar se é preciso mais alguma coisa  **
+** PT-BR: Verrificar se é preciso mais alguma coisa **
 ** EN-US: See if needs more something.              **
 ******************************************************
-*******************************************************/
+******************************************************/
 
 #include "include/z_zone.h"
 #include "include/i_system.h"
@@ -28,22 +28,22 @@ const void* W_LockLumpNum(int lump)
   const void *data = W_CacheLumpNum(lump, tag);
   //printf("data : %p\n\n", data);    // cosmito : debug
   
-/*******************************************************************
-******************************************************************** 
+/*********************************************************************
+********************************************************************** 
 ** EN-US: the cache it´s not gonna be allocated. in prboom do this: **
-** PT-BR: o cache não está a ser alocado. no prboom se faz assim: **
-**   D_DoomMainSetup/W_Init/W_InitCache                           **
-**                                                                **
-**   void W_InitCache(void)                                       **
-**   {                                                            **
-**     // set up caching                                          **
-**     cachelump = calloc(numlumps, sizeof *cachelump);           **
-**     if (!cachelump)                                            **
-**     I_Error ("W_Init: Couldn't allocate lumpcache");           **
-**     etc                                                        **
-**   }                                                            **
-********************************************************************
-********************************************************************/
+** PT-BR: o cache não está a ser alocado. no prboom se faz assim:   **
+**   D_DoomMainSetup/W_Init/W_InitCache                             **
+**                                                                  **
+**   void W_InitCache(void)                                         **
+**   {                                                              **
+**     // set up caching                                            **
+**     cachelump = calloc(numlumps, sizeof *cachelump);             **
+**     if (!cachelump)                                              **
+**     I_Error ("W_Init: Couldn't allocate lumpcache");             **
+**     etc                                                          **
+**   }                                                              **
+**********************************************************************
+**********************************************************************/
 
   if (!cachelump[lump].cache) 
   { 
