@@ -32,12 +32,9 @@
 //	int tantoangle[2049]	- ArcTan LUT,
 //	  maps tan(angle) to angle fast. Gotta search.
 //	
-//    
+// static const char rcsid[] = "$Id: tables.c,v 1.4 1997/02/03 16:47:57 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-
-static const char
-rcsid[] = "$Id: tables.c,v 1.4 1997/02/03 16:47:57 b1 Exp $";
 
 
 

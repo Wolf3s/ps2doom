@@ -20,10 +20,10 @@
 //	DOOM selection menu, options, episode etc.
 //	Sliders and icons. Kinda widget stuff.
 //
+// static const char rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
+
 
 #include <stdio.h>
 #include <ctype.h>
@@ -521,7 +521,7 @@ void M_ReadSaveStrings(void)
 	sprintf(name,"mc0:PS2DOOM/%s%d.dsg",currentWadName,i);
 
 	//handle = fopen (name, "r");
-    handle = fioOpen(name, O_RDONLY);
+    handle = fopen(name, O_RDONLY);
 	if (/*handle == NULL || */handle < 0)
 	{
 	    strcpy(&savegamestrings[i][0],EMPTYSTRING);
@@ -531,7 +531,7 @@ void M_ReadSaveStrings(void)
 	//count = fread (&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
     count = fioRead (handle, &savegamestrings[i], SAVESTRINGSIZE);
 	//fclose (handle);
-    fioClose (handle);
+    fclose (handle);
 	LoadMenu[i].status = 1;
     }
 }

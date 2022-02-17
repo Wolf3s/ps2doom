@@ -19,13 +19,12 @@
 // DESCRIPTION:
 //	System interface for sound.
 //
+// static const char rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
+
 
 #include <math.h>
-//Isto daqui provavelmente é do sdl não vou mexer aqui.
 #include <SDL/SDL_audio.h>
 #include <SDL/SDL_mutex.h>
 #include <SDL/SDL_byteorder.h>

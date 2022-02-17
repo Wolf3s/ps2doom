@@ -20,10 +20,10 @@
 //	Do all the WAD I/O, get map description,
 //	set up initial state and misc. LUTs.
 //
+// static const char rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
+
 
 
 #include <math.h>

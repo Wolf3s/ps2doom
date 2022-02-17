@@ -1,6 +1,7 @@
-
-EE_OBJS = am_map.o cosmitoFileIO.o d_items.o d_main.o d_net.o doomdef.o doomstat.o \
-dstrings.o f_finale.o f_wipe.o g_game.o hu_lib.o hu_stuff.o  \
+EE_OBJS = am_map.o cosmito_wav.o d_command.o d_items.o d_main.o d_net.o doomdef.o doomstat.o dstrings.o \
+elf_structure.o f_finale.o f_wipe.o \
+g_game.o \
+hu_lib.o hu_stuff.o \
 i_main.o i_net.o i_sound.o i_system.o i_video.o info.o m_argv.o m_bbox.o \
 m_cheat.o m_fixed.o m_menu.o m_misc.o m_random.o m_swap.o mixer_thread.o mixer.o mmus2mid.o p_ceilng.o \
 p_doors.o p_enemy.o p_floor.o p_inter.o p_lights.o p_map.o p_maputl.o \
@@ -14,7 +15,7 @@ BIN2S = $(PS2SDK)/bin/bin2s
 EE_BIN_DIR = bin/ps2doom.elf
 EE_INCS = -I$(GSKIT)/include -I$(GSKIT)/ee/dma/include -I$(GSKIT)/ee/gs/include -I$(GSKIT)/ee/toolkit/include -I$(PS2SDK)/ports/include/SDL -I$(PS2SDK)/ports/include -I$(PS2DEV)/isjpcm/include/ 
 EE_LDFLAGS = -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib -L$(PS2DEV)/isjpcm/lib/ -L$(PS2SDK)/iop/lib/ -L$(PS2SDK)/ee/lib/
-EE_LIBS = -lsdlmain -lsdlmixer -lsdl -lgskit -lcdvd -lm -lps2ip -ldebug -lconfig -lmc -lc -lhdd -lfileXio -lpoweroff -lsjpcm 
+EE_LIBS = -lsdlmain -lsdlmixer -lsdl -lgskit -lcdvd -lm -lps2ip -ldebug -lconfig -lmc -lc -lhdd -lfileXio -lpoweroff -lsjpcm -lmixer
 EE_CFLAGS = -DUSE_RWOPS -DHAVE_CONFIG_H -DHAVE_MIXER -Wall 
 
 all: $(EE_BIN)
@@ -83,16 +84,18 @@ isjpcm.s: $(PS2DEV)/isjpcm/bin/isjpcm.irx
 	$(BIN2S) $< $@ isjpcm_irx
 
 clean:
-	rm -f $(EE_OBJS) 
-
-bin:
-	rm -f $(EE_BIN_DIR)
+	rm -f $(EE_OBJS) rm -f $(EE_BIN_DIR)
 
 run:
 	ps2client execee host:$(EE_BIN)
 
 reset:
 	ps2client reset
+
+# taken from tyra engine examples
+pcsx2:
+	taskkill.exe /f /t /im pcsx2.exe || true
+	$(WSL_LINUX_PCSX2)/pcsx2.exe --elf=$(WSL_MAKE_WINDOWS)\\root\\ps2doom\\$(DIR_NAME)\\bin\\$(EE_BIN)
 
 include $(PS2SDK)/samples/Makefile.pref
 include $(PS2SDK)/samples/Makefile.eeglobal

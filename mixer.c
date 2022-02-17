@@ -1,9 +1,9 @@
-#include "include/mixer.h"
-
-#include "include/mixer_thread.h"
+#include <mixer/mixer.h>
+#include <mixer/mixer_thread.h>
 #include <kernel.h>
 #include <sjpcm.h>
 
+//todo: kill this sjpcm library no need this
 static sint16 mixbuffer_L[_MIXER_BUFSIZE] __attribute__((aligned (64)));
 static sint16 mixbuffer_R[_MIXER_BUFSIZE] __attribute__((aligned (64)));
 
@@ -19,7 +19,7 @@ static int MIXER_BUFSIZE;
 //extern int m_mixer_playing;
 extern int count;
 
-static int debug1;
+//static int debug1;
 
 extern sint16 *s1, *s2;
 static channel channels[_MIXER_MAXCHANNELS];

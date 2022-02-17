@@ -5,9 +5,8 @@
 #include <kernel.h>
 #include <sifrpc.h>
 
-#include "include/mixer_thread.h"
-#include "include/mixer.h"
-
+#include <mixer/mixer_thread.h>
+#include <mixer/mixer.h>
 #define THREAD_STACK_SIZE	(8 * 1024)
 
 static int         thread_waitsema = -1;
@@ -17,14 +16,14 @@ static ee_sema_t   thread_playsema;
 static int         thread_threadid;
 
 extern s32 main_thread_id;
-
+s32 mixer_VRstartID = 0;
 ///
 void Mixer_StartThread()
 {
 	extern void *_gp;
 
-	// Create a temporary semaphore that we'll use to wait for the RPC
-	// thread to finish initializing.  */
+	/* Create a temporary semaphore that we'll use to wait for the RPC
+	 thread to finish initializing.  */
 	thread_playsema.init_count = 0;
 	thread_playsema.max_count = 1;
 	if ((thread_waitsema = CreateSema(&thread_playsema)) < 0)
@@ -48,7 +47,7 @@ void Mixer_StartThread()
 	StartThread(thread_threadid, NULL);
 }
 
-s32 mixer_VRstartID = 0;
+
 
 //  DO NOT CALL THIS - this is the vblank handler function
 int Mixer_Tick_IntHandler(int cause)

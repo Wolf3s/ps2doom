@@ -28,20 +28,19 @@
  *      Created by a sound utility.
  *      Kept as a sample, DOOM2 sounds.
  *
+ * static const char rcsid[] = "$Id: sounds.c,v 1.2 1999/10/12 13:01:14 cphipps Exp $";
  *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: sounds.c,v 1.2 1999/10/12 13:01:14 cphipps Exp $";
+
 
 // killough 5/3/98: reformatted
 
 #include "include/doomtype.h"
 #include "include/sounds.h"
 
-//
-// Information about all the music
-//
-
+/*****************************
+Information about all the music
+******************************/
 musicinfo_t S_music[] = {
   { 0 },
   { "e1m1", 0 },
@@ -114,9 +113,9 @@ musicinfo_t S_music[] = {
 };
 
 
-//
-// Information about all the sfx
-//
+/********************************
+   Information about the all sfx
+**********************************/
 
 sfxinfo_t S_sfx[] = {
   // S_sfx[0] needs to be a dummy for odd reasons.

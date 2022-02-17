@@ -18,10 +18,10 @@
 //
 // DESCRIPTION:
 //
+// static const char rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
+
 
 #if defined(linux) || defined(__SVR4)
 #include <sys/socket.h>
@@ -54,8 +54,7 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #include <stdio.h>
 #include <errno.h>
 #include <ps2ip.h>
-#include "ps2doom.h"
-#include <math.h>
+#include "include/i_ps2net.h"
 #define IPPORT_USERRESERVED	1024 // ??
 #include "include/i_system.h"
 #include "include/d_event.h"
@@ -253,8 +252,12 @@ void PacketGet (void)
 	netbuffer->cmds[c].buttons = sw.cmds[c].buttons;
     }
 }
+//wip
+int gethostname(char *name, int len)
+{
 
-
+	return -1;
+}
 
 int GetLocalAddress (void)
 {

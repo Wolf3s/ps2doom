@@ -21,11 +21,11 @@
 //	Preparation of data for rendering,
 //	generation of lookups, caching, retrieval by name.
 //
+// static const chat rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 //-----------------------------------------------------------------------------
 
 
-static const char
-rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
+
 
 #ifdef __BEOS__
 #ifdef __GNUC__
@@ -650,7 +650,7 @@ void R_InitColormaps (void)
     lump = W_GetNumForName("COLORMAP"); 
     length = W_LumpLength (lump) + 255; 
     colormaps = Z_Malloc (length, PU_STATIC, 0); 
-    colormaps = (byte *)( ((int)colormaps + 255)&~0xff); 
+    colormaps = (byte *)( ((long)colormaps + 255)&~0xff); 
     W_ReadLump (lump,colormaps); 
 }
 

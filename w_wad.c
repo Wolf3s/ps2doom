@@ -19,11 +19,11 @@
 // DESCRIPTION:
 //	Handles WAD file header, directory, lump I/O.
 //
+// static const char rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 //-----------------------------------------------------------------------------
 
 
-static const char
-rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
+
 
 
 #include <stdlib.h>
@@ -217,7 +217,7 @@ void W_AddFile (char *filename)
 
     lump_p = &lumpinfo[startlump];
 	
-    storehandle = reloadname ? -1 : (int)handle;
+    storehandle = reloadname ? -1 : (long)handle;
 	
     for (i=startlump ; i<numlumps ; i++,lump_p++, fileinfo++)
     {
@@ -311,10 +311,11 @@ void W_InitMultipleFiles (char** filenames)
     if (!numlumps)
 	//I_Error ("W_InitFiles: no files found");
     {
-        scr_clear();
-        scr_printf ("\n\nERROR at W_InitFiles: no files found\n\n");
-        scr_printf (" Put a .WAD file along with PS2Doom.elf before running it or check if HDD paths are correct at ps2doom.config.\n\n");
-        SleepThread();
+        //scr_clear();
+        //scr_printf ("\n\nERROR at W_InitFiles: no files found\n\n");
+        printf (" Put a .WAD file along with PS2Doom.elf before running it or check if HDD paths are correct at ps2doom.config.\n\n");
+        //SleepThread();
+        
     }
     
     // set up caching
@@ -422,7 +423,6 @@ int W_GetNumForName (char* name)
     return i;
 }
 
-
 //
 // W_LumpLength
 // Returns the buffer size needed to load the given lump.
@@ -498,13 +498,14 @@ W_ReadLump
 	    I_Error ("W_ReadLump: couldn't open %s",reloadname);
     }
     else
-	handle = (FILE *)l->handle;
+   //l->handle
+  //fopen(handle, "%d"); 
+       
 
 	//// Hack to make I/O quicker	
-	//ps2_fseek (handle, l->position, SEEK_SET);
- //   c = ps2_fread (dest, 1, l->size, handle);
+	// ps2_fseek (handle, l->position, SEEK_SET);
+    //   c = ps2_fread (dest, 1, l->size, handle);
 
-		
     fseek (handle, l->position, SEEK_SET);
     c = fread (dest, 1, l->size, handle);
 	

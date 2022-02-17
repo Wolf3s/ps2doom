@@ -1,17 +1,16 @@
-// TBD : ver se é preciso mais alguma coisa
+/*****************************************************
+****************************************************** 
+** TBD:                                             **       
+** PT-BR: Verrificar se é preciso mais alguma coisa **
+** EN-US: See if needs more something.              **
+******************************************************
+******************************************************/
 
 #include "include/z_zone.h"
 #include "include/i_system.h"
 #include "include/w_wad.h"
 #include <string.h>
-static struct
-{
-  void *cache;
-#ifdef TIMEDIAG
-  int locktic;
-#endif
-  int locks;
-} *cachelump;
+
 
 
 /*
@@ -29,25 +28,25 @@ const void* W_LockLumpNum(int lump)
   const void *data = W_CacheLumpNum(lump, tag);
   //printf("data : %p\n\n", data);    // cosmito : debug
   
-/*
-** EN-US: the cache is not gonna be allocated. in prboom do this:
-** PT-BR: o cache não está a ser alocado. no prboom se faz assim:
-**   D_DoomMainSetup/W_Init/W_InitCache
-** 
-**   void W_InitCache(void)
-**   {
-**     // set up caching
-**     cachelump = calloc(numlumps, sizeof *cachelump);
-**     if (!cachelump)
-**     I_Error ("W_Init: Couldn't allocate lumpcache");
-**     etc
-**   }  
-*/
+/*********************************************************************
+********************************************************************** 
+** EN-US: the cache it´s not gonna be allocated. in prboom do this: **
+** PT-BR: o cache não está a ser alocado. no prboom se faz assim:   **
+**   D_DoomMainSetup/W_Init/W_InitCache                             **
+**                                                                  **
+**   void W_InitCache(void)                                         **
+**   {                                                              **
+**     // set up caching                                            **
+**     cachelump = calloc(numlumps, sizeof *cachelump);             **
+**     if (!cachelump)                                              **
+**     I_Error ("W_Init: Couldn't allocate lumpcache");             **
+**     etc                                                          **
+**   }                                                              **
+**********************************************************************
+**********************************************************************/
 
   if (!cachelump[lump].cache) 
   { 
-
-
     // read the lump in
     Z_Malloc(len, PU_CACHE, &cachelump[lump].cache);
     memcpy(cachelump[lump].cache, data, len);
@@ -74,7 +73,6 @@ const void* W_LockLumpNum(int lump)
 
   return cachelump[lump].cache;
 }
-
 
 void W_UnlockLumpNum(int lump)
 {

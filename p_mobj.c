@@ -19,10 +19,10 @@
 // DESCRIPTION:
 //	Moving object handling. Spawn functions.
 //
+// static const char rcsid[] = "$Id: p_mobj.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: p_mobj.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
+
 
 #include "include/i_system.h"
 #include "include/z_zone.h"

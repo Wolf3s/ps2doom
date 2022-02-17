@@ -26,10 +26,10 @@
 *
 * DESCRIPTION:  Platform-independent sound code
 *
+* static const char rcsid[] = "$Id: s_sound.c,v 1.10 1999/10/12 13:01:14 cphipps Exp $";
 *-----------------------------------------------------------------------------*/
 
-static const char
-rcsid[] = "$Id: s_sound.c,v 1.10 1999/10/12 13:01:14 cphipps Exp $";
+
 
 // killough 3/7/98: modified to allow arbitrary listeners in spy mode
 // killough 5/2/98: reindented, removed useless code, beautified
@@ -44,7 +44,6 @@ rcsid[] = "$Id: s_sound.c,v 1.10 1999/10/12 13:01:14 cphipps Exp $";
 #include "include/m_random.h"
 #include "include/w_wad.h"
 //#include "lprintf.h"   // cosmito
-
 
 #include <stdlib.h>
 // when to clip out sounds
@@ -69,15 +68,6 @@ rcsid[] = "$Id: s_sound.c,v 1.10 1999/10/12 13:01:14 cphipps Exp $";
 extern int snd_card, mus_card;
 extern boolean nosfxparm, nomusicparm;
 //jff end sound enabling variables readable here
-
-typedef struct
-{
-	sfxinfo_t *sfxinfo;  // sound information (if null, channel avail.)
-	void *origin;        // origin of sound
-	int handle;          // handle of the sound being played
-	int is_pickup;       // killough 4/25/98: whether sound is a player's weapon
-} channel_t;
-
 // the set of channels available
 static channel_t *channels;
 
@@ -143,8 +133,9 @@ void S_Init(int sfxVolume, int musicVolume)
 		// (the maximum numer of sounds rendered
 		// simultaneously) within zone memory.
 		// CPhipps - calloc
-		channels =
-			(channel_t *) Z_Calloc(numChannels,sizeof(channel_t), PU_STATIC, 0);
+	 typedef channel_t channels;
+
+	//Z_Malloc(numChannels, sizeof(channels), 0);
 
 		// Note that sounds have not been cached (yet).
 		for (i=1 ; i<NUMSFX ; i++)
@@ -215,7 +206,7 @@ void S_Start(void)
 			else
 				mnum = spmus[gamemap-1];
 		}
-		S_ChangeMusic(mnum, true);
+	S_ChangeMusic(mnum, true);
 }
 
 void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume)
@@ -235,8 +226,8 @@ void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume)
 	sfx_id &= ~PICKUP_SOUND;
 
 	// check for bogus sound #
-	if (sfx_id < 1 || sfx_id > NUMSFX)
-		I_Error("Bad sfx #: %d", sfx_id);
+        if (sfx_id < 1 || sfx_id > NUMSFX)
+	//	I_Error("Bad sfx #: %d", sfx_id);
 
 	sfx = &S_sfx[sfx_id];
 
@@ -287,9 +278,8 @@ void S_StartSoundAtVolume(void *origin_p, int sfx_id, int volume)
 		pitch = 255;
 
 	// kill old sound
-	for (cnum=0 ; cnum<numChannels ; cnum++)
-		if (channels[cnum].sfxinfo && channels[cnum].origin == origin &&
-			channels[cnum].is_pickup == is_pickup)
+	for(cnum=0; cnum<numChannels; cnum++)
+		if (channels[cnum].sfxinfo && channels[cnum].origin == origin && channels[cnum].is_pickup == is_pickup)
 		{
 			S_StopChannel(cnum);
 			break;
@@ -442,7 +432,7 @@ void S_SetMusicVolume(int volume)
 	if (!mus_card || nomusicparm)
 		return;
 	if (volume < 0 || volume > 15)
-	I_Error("Attempt to set music volume at %d", volume);
+  //I_Error(volume, "Attempt to set music volume at %d");
 	I_SetMusicVolume(volume);
 	snd_MusicVolume = volume;
 }
@@ -456,7 +446,7 @@ void S_SetSfxVolume(int volume)
 	if (!snd_card || nosfxparm)
 		return;
 	if (volume < 0 || volume > 127)
-		I_Error("Attempt to set sfx volume at %d", volume);
+//		I_Error(volume, "Attempt to set sfx volume at %d");
 	snd_SfxVolume = volume;
 }
 
@@ -486,7 +476,7 @@ void S_ChangeMusic(int musicnum, int looping)
 		return;
 
 	if (musicnum <= mus_None || musicnum >= NUMMUSIC)
-		I_Error("Bad music number %d", musicnum);
+//		I_Error(musicnum, "Bad music number %d");
 
 	music = &S_music[musicnum];
 
