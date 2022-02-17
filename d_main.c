@@ -1451,10 +1451,10 @@ void D_DoomMain (void)
     (
 	"===========================================================================\n"
 	"     PS2DOOM is free software, covered by the DOOM Source Code\n               "
-    "     License. However WITHOUT ANY WARRANTY even the implied warranty of      "
-    "     FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License for more details.\n"
-    "     You are welcome to change and distribute but you can´t sell comercially.\n"
-    "     See the License for more information.\n                                    "                                                                 
+  "     License. However WITHOUT ANY WARRANTY even the implied warranty of      "
+  "     FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License for more details.\n"
+  "     You are welcome to change and distribute but you can´t sell comercially.\n"
+  "     See the License for more information.\n                                    "                                                                 
 	"=============================================================================\n");
 	
     getchar ();
