@@ -1,9 +1,10 @@
 #include <string.h>
 #include "include/s_sound.h"
 #include "include/d_main.h"
+#include <sjpcm.h>
 
 /****************************************************************************
-** ps2doom cheat support - code typing and command line
+**          ps2doom cheat support - code typing and command line           **
 *****************************************************************************/
 void ps2_do_cheat(int cheat)
 {
@@ -50,7 +51,7 @@ void ps2_do_cheat(int cheat)
 	   break;
 	   case 13: 
 	   str = "no_sound"; //Deactivates the sound
-          // wip SjPCM_Pause()
+          SjPCM_Pause();
 	   return;
            break; 
 	   case 14: 

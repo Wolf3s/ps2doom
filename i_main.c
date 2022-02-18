@@ -24,6 +24,7 @@
 
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include <stdio.h>
 #include <libmc.h>
 #include <libconfig.h>
@@ -224,7 +225,7 @@ int getFileSize(int fd)
 	return size;
 }
 
-void Display_Pal()
+void Display()
 {
     #define PAL_WIDTH 480
     #define PAL_HEIGHT 576
@@ -569,33 +570,35 @@ int main( int argc, char**	argv )
     int configLoadSuccess = 0;
     GetElfFilename(argv[0], deviceName, fullPath, elfFilename);
     main_thread_id = GetThreadId();
-	
+    
+    //Todo: add this on a void declaration Like void SDL_Dislplay(); and figure out whats going on the SDL1_Cursor 
+    #define WIDTH 640
+    #define HEIGHT 448
+    #define BITS 32
 
     SDL_Init(SDL_INIT_VIDEO);
   
     SDL_Surface *surface;
   
     SDL_Surface *window;
-    
-     //Apply image to screen
-    #define WIDTH 640
-    #define HEIGHT 448
-    #define BITS 32
-
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-  
-    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
-
+      
     surface = SDL_LoadBMP("gfx/ps2doom.bmp");
     
+    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
+
     SDL_BlitSurface( surface, NULL, window, NULL );
+    
+    // Set window title
+    SDL_WM_SetCaption("Display BMP", NULL);
 
     SDL_Flip(window);
     
     SDL_Delay(6000);
     
-    SDL_ShowCursor(SDL_DISABLE);
-
+    SDL_ShowCursor(SDL_IGNORE);
+    
+    SDL_DisplayFormat(surface);
+    
     SDL_FreeSurface(surface);
 
     SDL_Quit();
@@ -920,7 +923,7 @@ int main( int argc, char**	argv )
 
     return 0;
    */ 
-   Display_Pal();
+   Display();
 } 
 
 

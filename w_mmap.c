@@ -5,21 +5,20 @@
 ** EN-US: See if needs more something.              **
 ******************************************************
 ******************************************************/
-
 #include "include/z_zone.h"
 #include "include/i_system.h"
 #include "include/w_wad.h"
 #include <string.h>
 
-
-
-/*
- * W_LockLumpNum
- *
- * This copies the lump into a malloced memory region and returns its address
- * instead of returning a pointer into the memory mapped area
- *
- */
+/*******************************************************************************
+******************************************************************************** 
+** const void* W_LockLumpNum(int lump);                                       **
+**                                                                            **
+** Description:                                                               **
+** This copies the lump into a malloced memory region and returns its address **
+** instead of returning a pointer into the memory mapped area                 **
+********************************************************************************
+********************************************************************************/
 const void* W_LockLumpNum(int lump)
 {
   size_t len = W_LumpLength(lump);
