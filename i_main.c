@@ -225,7 +225,7 @@ int getFileSize(int fd)
 	return size;
 }
 
-void Display()
+void Display_mode()
 {
     #define PAL_WIDTH 480
     #define PAL_HEIGHT 576
@@ -237,34 +237,30 @@ void Display()
 
     int forceDisplayMode = -1;
     int argc; 
-    int PAL;
-    int NTSC;
     char** argv; 
+
     myargc = argc; 
     myargv = argv; 
-    SDL_Surface *window;
-    SDL_Surface *screen;
     
-    window = SDL_SetVideoMode(PAL_WIDTH, PAL_HEIGHT, PAL_BITS, SDL_SWSURFACE);
+    SDL_Surface *PAL;
+    SDL_Surface *NTSC;
     
-    screen = SDL_SetVideoMode(NTSC_WIDTH, NTSC_HEIGHT, NTSC_BITS, SDL_SWSURFACE);
-
-    PAL = window;   
-    NTSC = screen;
+    PAL = SDL_SetVideoMode(PAL_WIDTH, PAL_HEIGHT, PAL_BITS, SDL_SWSURFACE);
+    
+    NTSC = SDL_SetVideoMode(NTSC_WIDTH, NTSC_HEIGHT, NTSC_BITS, SDL_SWSURFACE);
 
     if (PAL)
     {
-     SDL_Flip(window);
+     SDL_Flip(PAL);
     
      SDL_ShowCursor(SDL_DISABLE);
 
      SDL_Quit();
     }
     
-    
     else if(NTSC)
     {
-      SDL_Flip(screen);
+      SDL_Flip(NTSC);
 
       SDL_ShowCursor(SDL_DISABLE);
 
@@ -273,10 +269,10 @@ void Display()
 
     else 
     {
-        PS2SDL_ForceSignal(1);
-	printf("error");
+     //PS2SDL_ForceSignal(1);
+	 printf("error");
     }
-    //TBD: Force display here too but i can't do it right now. shit!!!
+    //TBD: Force display here with sdl1 too but i can't do it right now. shit!!!
     // Changes accordingly to filename
     forceDisplayMode = getDisplayModeFromELFName(argv);
     if (forceDisplayMode != -1)
@@ -291,6 +287,43 @@ void Display()
     D_DoomMain (); 
 
     return 0;
+}
+
+void Display_screen()
+{
+
+    //Todo: figure out whats going on the SDL1 cursor 
+    #define WIDTH 640
+    #define HEIGHT 448
+    #define BITS 32
+
+    SDL_Init(SDL_INIT_VIDEO);
+  
+    SDL_Surface *image;
+  
+    SDL_Surface *window;
+      
+    image = SDL_LoadBMP("gfx/ps2doom.bmp");
+    
+    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
+
+    SDL_BlitSurface( image, NULL, window, NULL );
+    
+    // Set window title
+    SDL_WM_SetCaption("Display BMP", NULL);
+
+    SDL_Flip(window);
+    
+    SDL_Delay(6000);
+    
+    SDL_ShowCursor(SDL_IGNORE);
+    
+    SDL_DisplayFormat(image);
+    
+    SDL_FreeSurface(image);
+
+    SDL_Quit();
+
 }
 
 //#endif
@@ -570,49 +603,20 @@ int main( int argc, char**	argv )
     int configLoadSuccess = 0;
     GetElfFilename(argv[0], deviceName, fullPath, elfFilename);
     main_thread_id = GetThreadId();
-    
-    //Todo: add this on a void declaration Like void SDL_Dislplay(); and figure out whats going on the SDL1_Cursor 
-    #define WIDTH 640
-    #define HEIGHT 448
-    #define BITS 32
-
-    SDL_Init(SDL_INIT_VIDEO);
-  
-    SDL_Surface *surface;
-  
-    SDL_Surface *window;
-      
-    surface = SDL_LoadBMP("gfx/ps2doom.bmp");
-    
-    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
-
-    SDL_BlitSurface( surface, NULL, window, NULL );
-    
-    // Set window title
-    SDL_WM_SetCaption("Display BMP", NULL);
-
-    SDL_Flip(window);
-    
-    SDL_Delay(6000);
-    
-    SDL_ShowCursor(SDL_IGNORE);
-    
-    SDL_DisplayFormat(surface);
-    
-    SDL_FreeSurface(surface);
-
-    SDL_Quit();
+    Display_screen();
     
     SifInitRpc(0); 
-/*      
-*************************************************************************************************************************************************   
+
+/************************************************************************************************************************************************ 
+*************************************************************************************************************************************************    
 **    init_scr();                                                                                                                              **
 **    scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");                                                                                      **
 **    scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");                                 **
 **    scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic"); **
 **    scr_clear();                                                                                                                             **
 *************************************************************************************************************************************************
-*/
+*************************************************************************************************************************************************/
+    
     printf("sample: kicking IRXs\n");
 	
     //ret = SifLoadModule("rom0:LIBSD", 0, NULL);
@@ -899,31 +903,34 @@ int main( int argc, char**	argv )
     Mixer_Init();       // TBD : arg number channels
 
     return 0;
-    /*
-        // Until sdl isn't fixed
-    int PAL = detect_signal();
-    if (PAL == 1)
-        PS2SDL_ForceSignal(0);
-    else
-        PS2SDL_ForceSignal(1);
-
-    // Changes accordingly to filename
-    forceDisplayMode = getDisplayModeFromELFName(argv);
-    if (forceDisplayMode != -1)
-        PS2SDL_ForceSignal(forceDisplayMode);
-
-    // Sets SAMPLECOUNT accordingly to system
-    if (PAL == 1)
-        SAMPLECOUNT = 960;
-    else
-        SAMPLECOUNT = 800;
-
-
-    D_DoomMain (); 
-
-    return 0;
-   */ 
-   Display();
+    /********************************************************
+    *********************************************************  
+    **  // Until sdl isn't fixed                           **
+    **  int PAL = detect_signal();                         **
+    **  if (PAL == 1)                                      **
+    **  PS2SDL_ForceSignal(0);                             **
+    ** else                                                **
+    **  PS2SDL_ForceSignal(1);                             **
+    **                                                     **
+    ** // Changes accordingly to filename                  **
+    ** forceDisplayMode = getDisplayModeFromELFName(argv); **
+    ** if (forceDisplayMode != -1)                         **
+    **  PS2SDL_ForceSignal(forceDisplayMode);              **
+    **                                                     **
+    ** // Sets SAMPLECOUNT accordingly to system           **
+    ** if (PAL == 1)                                       **
+    **  SAMPLECOUNT = 960;                                 **
+    ** else                                                **
+    **   SAMPLECOUNT = 800;                                **
+    **                                                     **
+    **                                                     **
+    ** D_DoomMain ();                                      **
+    **                                                     **
+    ** return 0;                                           **
+    **                                                     **
+    *********************************************************
+    *********************************************************/ 
+   Display_mode();
 } 
 
 
