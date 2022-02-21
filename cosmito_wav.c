@@ -14,8 +14,8 @@ int GetWAVsize(char *filename)
 {
     int size;
     FILE *wav;
-    wav = fopen(filename, "rb");
     
+	wav = fopen(filename, "rb");
     if (wav != NULL) 
     {
 	 fseek(wav, 0, SEEK_END); 
@@ -23,9 +23,10 @@ int GetWAVsize(char *filename)
 	 size -= 0x30; fclose(wav); 
 	 return size;
     } 
+	
 	else 
 	{
-		return 0;
+	  return 0;
 	}
 }
 

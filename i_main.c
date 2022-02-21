@@ -603,6 +603,7 @@ int main( int argc, char**	argv )
     int configLoadSuccess = 0;
     GetElfFilename(argv[0], deviceName, fullPath, elfFilename);
     main_thread_id = GetThreadId();
+    
     Display_screen();
     
     SifInitRpc(0); 
