@@ -27,17 +27,8 @@
 
 
 
-#ifdef __BEOS__
-#ifdef __GNUC__
-extern void *alloca(int);
-#else
-#include <alloca.h>
-#endif
-#endif /* __BEOS__ */
-
-
 #include "include/m_swap.h"
-
+#include "include/r_data.h"
 #include "include/i_system.h"
 #include "include/z_zone.h"
 
@@ -50,7 +41,7 @@ extern void *alloca(int);
 #include "include/doomstat.h"
 #include "include/r_sky.h"
 
-#include "include/r_data.h"
+#include "include/m_fixed.h"
 //
 // Graphics.
 // DOOM graphics for walls and sprites

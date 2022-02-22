@@ -21,7 +21,14 @@
 
 #ifndef __M_FIXED__
 #define __M_FIXED__
+
+#ifdef __BEOS__
+#ifdef __GNUC__
+extern void *alloca(int);
+#else
 #include <alloca.h>
+#endif
+#endif /* __BEOS__ */
 
 //
 // Fixed point, 32bit as 16.16.

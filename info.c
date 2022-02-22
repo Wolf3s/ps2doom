@@ -855,16 +855,19 @@ state_t	states[NUMSTATES] = {
     {SPR_PAIN,32778,8,{NULL},S_PAIN_DIE5,0,0},	// S_PAIN_DIE4
     {SPR_PAIN,32779,8,{A_PainDie},S_PAIN_DIE6,0,0},	// S_PAIN_DIE5
     {SPR_PAIN,32780,8,{NULL},S_NULL,0,0},	// S_PAIN_DIE6
-/*                                                             
-    id-Software old mess up pain elementals. 
-	They used to gave the pain elementals a raise state while they leave no corps.
-	
-	{SPR_PAIN,12,8,{NULL},S_PAIN_RAISE2,0,0},	// S_PAIN_RAISE1
-    {SPR_PAIN,11,8,{NULL},S_PAIN_RAISE3,0,0},	// S_PAIN_RAISE2
-    {SPR_PAIN,10,8,{NULL},S_PAIN_RAISE4,0,0},	// S_PAIN_RAISE3
-    {SPR_PAIN,9,8,{NULL},S_PAIN_RAISE5,0,0},	// S_PAIN_RAISE4
-    {SPR_PAIN,8,8,{NULL},S_PAIN_RAISE6,0,0},	// S_PAIN_RAISE5
-    {SPR_PAIN,7,8,{NULL},S_PAIN_RUN1,0,0},	// S_PAIN_RAISE6 */
+/***********************************************************************************                                                             
+************************************************************************************
+**  id-Software old mess up pain elementals. 									  
+**	They used to gave the pain elementals a raise state while they leave no corps.
+**	                                                                              
+**	{SPR_PAIN,12,8,{NULL},S_PAIN_RAISE2,0,0},	// S_PAIN_RAISE1                  
+**  {SPR_PAIN,11,8,{NULL},S_PAIN_RAISE3,0,0},	// S_PAIN_RAISE2	              
+**  {SPR_PAIN,10,8,{NULL},S_PAIN_RAISE4,0,0},	// S_PAIN_RAISE3				  
+**  {SPR_PAIN,9,8,{NULL},S_PAIN_RAISE5,0,0},	// S_PAIN_RAISE4                  
+**  {SPR_PAIN,8,8,{NULL},S_PAIN_RAISE6,0,0},	// S_PAIN_RAISE5                  
+**  {SPR_PAIN,7,8,{NULL},S_PAIN_RUN1,0,0},	// S_PAIN_RAISE6                             
+************************************************************************************
+************************************************************************************/
     {SPR_SSWV,0,10,{A_Look},S_SSWV_STND2,0,0},	// S_SSWV_STND
     {SPR_SSWV,1,10,{A_Look},S_SSWV_STND,0,0},	// S_SSWV_STND2
     {SPR_SSWV,0,3,{A_Chase},S_SSWV_RUN2,0,0},	// S_SSWV_RUN1
