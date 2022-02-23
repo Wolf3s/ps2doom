@@ -21,12 +21,12 @@
  
 - limited look up/down by y-shearing?
   Prolly not worth it, rather switch to GLDOOM
-(GLdoom? lol i would use ps2gl or gsKit but this is nosense)
+(Better use gsKit to GLDOOM Instead or use ps2gl)
 
-- switch to C++?(Why a rewrite?)
+- switch to C++?
   The action function pointers have varying
   argument lists (no parameter, one, etc.).
-  C++ doesn't like that much. A major rewrite.
+  C++ doesn't like that much. A major rewrite from scratch.(Well fordoomed loader yes)
 
 - switch to doommain.c plus libdoom? Have 
   libref, libgame etc.?
@@ -122,4 +122,4 @@
 - threaded sndserver? SHM mixing buffer?
    Or internal, timer-based?
 
-- Fix the fucking black screen after several updates
+- Fix the black screen after several updates(done)
