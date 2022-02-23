@@ -212,6 +212,7 @@ int xlatekey(SDL_keysym *key)
 void I_ShutdownGraphics(void)
 {
   SDL_Quit();
+  printf("Shutting down graphics");
 }
 
 
@@ -219,12 +220,10 @@ void I_ShutdownGraphics(void)
 /*****************************
 ** void I_StartFrame(void); **
 ******************************/
-
 //todo: implement frame 
 void I_StartFrame (void)
 {
     // er?
-
 }
 
 
@@ -941,7 +940,8 @@ void I_SetPalette (byte* palette)
     int i;
     SDL_Color colors[256];
 
-    for ( i=0; i<256; ++i ) {
+    for ( i=0; i<256; ++i ) 
+    {
 	colors[i].r = gammatable[usegamma][*palette++];
 	colors[i].g = gammatable[usegamma][*palette++];
 	colors[i].b = gammatable[usegamma][*palette++];
@@ -953,7 +953,7 @@ void I_SetPalette (byte* palette)
 
 void I_InitGraphics(void)
 {
-
+    //should i put the loader here?
     static int	firsttime=1;
     Uint16 video_w, video_h, w, h;
     Uint8 video_bpp;
@@ -1004,25 +1004,33 @@ void I_InitGraphics(void)
         default:
 		;
     }
-    if ( multiply > 3 ) {
-        I_Error("Smallest available mode (%dx%d) is too large!",
-						video_w, video_h);
-    }
-    screen = SDL_SetVideoMode(video_w, video_h, 8, video_flags);
-    if ( screen == NULL ) 
+    if ( multiply > 3 ) 
     {
-        I_Error("Could not set %dx%d video mode: %s", video_w, video_h,
-							SDL_GetError());
+        I_Error("Smallest available mode (%dx%d) is too large!", video_w, video_h);
     }
-    SDL_ShowCursor(0);
+    
+    if (screen) 
+    {
+        screen = SDL_SetVideoMode(video_w, video_h, 8, video_flags);
+    }
+
+    else
+    {
+        I_Error("Could not set %dx%d video mode: %s", video_w, video_h, SDL_GetError());
+    }
+    
+    SDL_ShowCursor(1);
     SDL_WM_SetCaption("PS2DOOM! v1.0.5.0", "DOOM");
 
     /* Set up the screen displays */
     w = SCREENWIDTH * multiply;
     h = SCREENHEIGHT * multiply;
-    if (multiply == 1 && !SDL_MUSTLOCK(screen) ) {
-	screens[0] = (unsigned char *) screen->pixels;
-    } else {
+    if (multiply == 1 && !SDL_MUSTLOCK(screen) ) 
+    {
+    	screens[0] = (unsigned char *) screen->pixels;
+    } 
+    else 
+    {
 	screens[0] = (unsigned char *) Z_Malloc (SCREENWIDTH * SCREENHEIGHT, PU_STATIC, NULL);
         if ( screens[0] == NULL )
             I_Error("Couldn't allocate screen memory");
