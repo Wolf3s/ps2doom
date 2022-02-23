@@ -216,15 +216,16 @@ void I_ShutdownGraphics(void)
 
 
 
-//
-// I_StartFrame
-//
+/*****************************
+** void I_StartFrame(void); **
+******************************/
+
+//todo: implement frame 
 void I_StartFrame (void)
 {
     // er?
 
 }
-
 
 
 /* This processes SDL events */
@@ -1008,12 +1009,13 @@ void I_InitGraphics(void)
 						video_w, video_h);
     }
     screen = SDL_SetVideoMode(video_w, video_h, 8, video_flags);
-    if ( screen == NULL ) {
+    if ( screen == NULL ) 
+    {
         I_Error("Could not set %dx%d video mode: %s", video_w, video_h,
 							SDL_GetError());
     }
     SDL_ShowCursor(0);
-    SDL_WM_SetCaption("SDL DOOM! v1.10", "doom");
+    SDL_WM_SetCaption("PS2DOOM! v1.0.5.0", "DOOM");
 
     /* Set up the screen displays */
     w = SCREENWIDTH * multiply;
