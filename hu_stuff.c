@@ -76,7 +76,7 @@ char*	chat_macros[] =
     HUSTR_CHATMACRO9
 };
 
-char*	player_names[] =
+char* player_names[] =
 {
     HUSTR_PLRGREEN,
     HUSTR_PLRINDIGO,
