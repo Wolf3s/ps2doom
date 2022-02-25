@@ -234,7 +234,7 @@ void Display_mode()
     #define NTSC_WIDTH 640
     #define NTSC_HEIGHT 480
     #define NTSC_BITS 32
-
+//TODO: Force disply void
     int forceDisplayMode = -1;
     int argc; 
     char** argv; 
@@ -269,7 +269,6 @@ void Display_mode()
 
     else 
     {
-     //PS2SDL_ForceSignal(1);
 	 printf("error");
     }
     //TBD: Force display here with sdl1 too but i can't do it right now. shit!!!
@@ -296,8 +295,6 @@ void Display_screen()
     #define WIDTH 640
     #define HEIGHT 448
     #define BITS 32
-
-    SDL_Init(SDL_INIT_VIDEO);
   
     SDL_Surface *image;
   
@@ -308,12 +305,8 @@ void Display_screen()
     window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
 
     SDL_Flip(window);
-    
-    printf("SDL1.2 Is not working properly", SDL_GetError());
-    //I_Error(); is not working properly when started on ps2
-    
-    
-    SDL_BlitSurface( image, NULL, window, NULL );
+     // printf("SDL1.2 Is not working properly", SDL_GetError());
+    SDL_BlitSurface( image, NULL, window, NULL );  
     
     // Set window title
     SDL_WM_SetCaption("Display BMP", NULL);
