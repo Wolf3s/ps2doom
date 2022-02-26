@@ -38,28 +38,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define NEWLIB_PORT_AWARE
-#include <fileXio_rpc.h>
-#include <io_common.h>
-#include <fileio.h>
-#include <fileXio.h>
-#include <iopcontrol.h>
-#include <iopheap.h>
+#include <fcntl.h>
+#include <sjpcm.h>
+
+/************************************************
+*************************************************
+** #define NEWLIB_PORT_AWARE                   **
+** include <fileXio_rpc.h>                     **
+** #include <io_common.h>                      **  
+** todo: rewrite fileXio module from scratch   ** 
+*************************************************
+*************************************************/
 
 
 #define MAX_PARTITIONS   100
 
 static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )   ) = "rom0:UDNL rom0:EELOADCNF";
 
-#include <sjpcm.h>
+
 
 // cosmitoMixer
 #include <sifrpc.h>
 #include <mixer/mixer.h>
 #include <mixer/mixer_thread.h>
 #include <kernel.h>     //for GetThreadId 
-
 #include <mixer/wav.h>
+
 #include "include/elf_structure.h"
 #include "include/pad_support.h"
 #include "include/modules.h"
@@ -827,7 +831,7 @@ int main( int argc, char**	argv )
     {
         SifExecModuleBuffer(poweroff, size_poweroff, 0, NULL, &ret);
         SifExecModuleBuffer(iomanX, size_iomanX, 0, NULL, &ret);
-        SifExecModuleBuffer(fileXio, size_fileXio, 0, NULL, &ret);
+        //SifExecModuleBuffer(fileXio, size_fileXio, 0, NULL, &ret);
         SifExecModuleBuffer(ps2dev9, size_ps2dev9, 0, NULL, &ret);
         SifExecModuleBuffer(ps2atad, size_ps2atad, 0, NULL, &ret);
         SifExecModuleBuffer(ps2hdd, size_ps2hdd, sizeof(hddarg), hddarg, &ret);
@@ -878,7 +882,7 @@ int main( int argc, char**	argv )
         }
 
         
-        mountErr = fileXioMount( "pfs0:", hdd_path_to_partition, FILEXIO_MOUNT );
+        //mountErr = fileXioMount( "pfs0:", hdd_path_to_partition, FILEXIO_MOUNT );
         
         if( mountErr < 0 )
         {
