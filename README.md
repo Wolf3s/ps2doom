@@ -10,7 +10,7 @@ Buildable with: ```make all```
 Some very hackish stuff in w_wad.c / W_ReadLump function, to speed up loading,
 which will probably break loading from multiple files.
 
-Discord server: [DOOMED LOADER SERVER]https://discord.gg/YNTdx5dXF6
+Discord server: [DOOMED LOADER SERVER](https://discord.gg/YNTdx5dXF6)
 
 ```
 Controls:
