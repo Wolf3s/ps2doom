@@ -26,8 +26,6 @@
 #include <mixer/mixer.h>
 #include <mixer/mixer_thread.h>
 
-
-
 #include <math.h>
 #include <unistd.h>
 #include <SDL.h>
@@ -40,12 +38,11 @@
 #include "include/z_zone.h"
 #include "include/m_swap.h"
 #include "include/i_system.h"
-//#include "i_sound.h"		cosmito
 #include "include/l_sound_sdl.h"
 #include "include/m_argv.h"
 #include "include/m_misc.h"
 #include "include/w_wad.h"
-//#include "lprintf.h"
+
 #include "include/doomdef.h"
 #include "include/doomstat.h"
 #include "include/doomtype.h"

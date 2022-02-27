@@ -75,7 +75,7 @@ static int access(char *file, int mode)
 #include "include/m_misc.h"
 #include "include/m_menu.h"
 #include "include/i_system.h"
-//#include "include/i_sound.h"
+
 #include "include/l_sound_sdl.h"
 #include "include/g_game.h"
 #include "include/hu_stuff.h"

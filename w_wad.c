@@ -38,10 +38,11 @@
 #include "include/z_zone.h"
 
 #ifdef __GNUG__
-#pragma implementation "w_wad.h"
+#pragma implementation "include/w_wad.h"
 #endif
 #include "include/w_wad.h"
-
+#include "include/m_fixed.h"
+#include "include/ps2fread.h"
 
 
 
@@ -112,33 +113,6 @@ ExtractFileBase
 }
 
 
-
-
-
-//
-// LUMP BASED ROUTINES.
-//
-
-//
-// W_AddFile
-// All files are optional, but at least one file must be
-//  found (PWAD, if all required lumps are present).
-// Files with a .wad extension are wadlink files
-//  with multiple lumps.
-// Other files are single lumps with the base filename
-//  for the lump name.
-//
-// If filename starts with a tilde, the file is handled
-//  specially to allow map reloads.
-// But: the reload feature is a fragile hack...
-
-#ifdef __BEOS__
-#ifdef __GNUC__
-extern void *alloca(int);
-#else
-#include <alloca.h>
-#endif
-#endif /* __BEOS__ */
 
 int			reloadlump;
 char*			reloadname;

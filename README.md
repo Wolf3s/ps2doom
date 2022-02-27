@@ -1,22 +1,22 @@
 PS2Doom WIP
 ===========
 
-A working in progress DOOM PlayStation 2 port
+A working in progress PlayStation 2 port of DOOM
 
-Requires PS2SDK, gsKit, SDL, isjpcm for PS2 to compile.
+Requires [PS2SDK](https://github.com/ps2dev/ps2sdk), [gsKit](https://github.com/ps2dev/gsKit), [PS2SDK-PORTS](https://github.com/ps2dev/ps2sdk-ports) and PS2 to compile.
 
-Buildable with: make all
+Buildable with: ```make all```
 
 Some very hackish stuff in w_wad.c / W_ReadLump function, to speed up loading,
 which will probably break loading from multiple files.
 
-Discord server: https://discord.gg/YNTdx5dXF6
+Discord server: [DOOMED LOADER SERVER](https://discord.gg/YNTdx5dXF6)
 
 ```
 Controls:
 
 Left Analog Stick : Move
-Cross             : Enter 
+Cross             : Enter
 Square/R1         : CTRL / Fire
 Circle/R2         : Space / Open doors
 Triangle          : Escape

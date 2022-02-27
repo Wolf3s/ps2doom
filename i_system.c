@@ -34,7 +34,6 @@
 #include "include/m_misc.h"
 #include "include/i_video.h"
 
-//#include "i_sound.h"		// cosmito
 #include "include/l_sound_sdl.h"
 
 #include "include/d_net.h"
@@ -109,16 +108,22 @@ int  I_GetTime (void)
 void I_Init (void)
 {
     //if ( SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0 )
-    if ( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0 )
-        I_Error("Could not initialize SDL: %s", SDL_GetError());
+        if ( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0 )
+        {
 
-    I_InitSound();
-    //  I_InitGraphics();
+                I_InitSound();
+                //  I_InitGraphics();
 
-	//SDL_Joystick *joystick;
+	            //SDL_Joystick *joystick;
 
-	joystick = SDL_JoystickOpen(0);
-
+	            joystick = SDL_JoystickOpen(0);
+        }
+        
+        else
+        {
+            I_Error("Could not initialize SDL: %s", SDL_GetError());
+        }
+    
 }
 
 //
@@ -127,11 +132,7 @@ void I_Init (void)
 void I_Quit (void)
 {
     // Just a simple back to browser, from uLauncELF4.13 sources (TBD : check for latest code) - cosmito
-
-	__asm__ __volatile__(
-    "	li $3, 0x04;"
-    "	syscall;"
-    "	nop;" );
+	__asm__ __volatile__("	li $3, 0x04;" "	syscall;" "	nop;" );
 
     D_QuitNetGame ();
     I_ShutdownSound();
@@ -187,7 +188,7 @@ void I_Error (char *error, ...)
     if (demorecording)
 	G_CheckDemoStatus();
 
-    D_QuitNetGame ();
+    D_QuitNetGame();
     I_ShutdownGraphics();
     
     exit(-1);

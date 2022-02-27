@@ -1,3 +1,7 @@
+#todo: this lib filexio it´s confilcting the newlib when i´ve taken of the old lib the ps2doom and \
+-I$(GSKIT)/include -I$(GSKIT)/ee/dma/include -I$(GSKIT)/ee/gs/include -I$(GSKIT)/ee/toolkit/include \
+-L$(PS2DEV)/gsKit/lib -lgskit
+
 EE_OBJS = am_map.o cosmito_wav.o d_command.o d_items.o d_main.o d_net.o doomdef.o doomstat.o dstrings.o \
 elf_structure.o f_finale.o f_wipe.o \
 g_game.o \
@@ -11,12 +15,13 @@ r_main.o r_plane.o r_segs.o r_sky.o r_things.o s_sound.o sjpcm_rpc.o sounds.o \
 st_lib.o st_stuff.o tables.o v_video.o w_wad.o w_mmap.o wi_stuff.o z_zone.o \
 
 EE_BIN = ps2doom.elf
-BIN2S = $(PS2SDK)/bin/bin2s
 EE_BIN_DIR = bin/ps2doom.elf
-EE_INCS = -I$(GSKIT)/include -I$(GSKIT)/ee/dma/include -I$(GSKIT)/ee/gs/include -I$(GSKIT)/ee/toolkit/include -I$(PS2SDK)/ports/include/SDL -I$(PS2SDK)/ports/include -I$(PS2DEV)/isjpcm/include/ 
-EE_LDFLAGS = -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib -L$(PS2DEV)/isjpcm/lib/ -L$(PS2SDK)/iop/lib/ -L$(PS2SDK)/ee/lib/
-EE_LIBS = -lsdlmain -lsdlmixer -lsdl -lgskit -lcdvd -lm -lps2ip -ldebug -lconfig -lmc -lc -lhdd -lfileXio -lpoweroff -lsjpcm -lmixer
-EE_CFLAGS = -DUSE_RWOPS -DHAVE_CONFIG_H -DHAVE_MIXER -Wall 
+EE_INCS = -I$(PS2SDK)/ports/include/SDL -I$(PS2SDK)/ports/include -I$(PS2DEV)/isjpcm/include/ 
+EE_LDFLAGS = -L$(PS2SDK)/ports/lib -L$(PS2DEV)/isjpcm/lib/ -L$(PS2SDK)/iop/lib/ -L$(PS2SDK)/ee/lib/
+EE_LIBS = -lsdlmain -lsdlmixer -lsdl -lcdvd -lm -lps2ip -ldebug -lconfig -lmc -lc -lhdd -lfileXio -lpoweroff -lsjpcm -lmixer -llua
+EE_CFLAGS = -DUSE_RWOPS -DHAVE_CONFIG_H -DHAVE_MIXER -Wall -DLUA_USE_PS2
+
+BIN2S = $(PS2SDK)/bin/bin2s
 
 all: $(EE_BIN)
 	mv $(EE_BIN) bin/

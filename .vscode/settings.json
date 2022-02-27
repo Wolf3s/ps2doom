@@ -97,6 +97,10 @@
         "info.h": "c",
         "sdl_image.h": "c",
         "sdl_video.h": "c",
-        "sdl_main.h": "c"
+        "sdl_main.h": "c",
+        "m_fixed.h": "c",
+        "libpad.h": "c",
+        "io_common.h": "c",
+        "loadfile.h": "c"
     }
 }

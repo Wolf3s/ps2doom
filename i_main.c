@@ -22,8 +22,8 @@
 // static const char rcsid[] = "$Id: i_main.c,v 1.4 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include <stdio.h>
 #include <libmc.h>
 #include <libconfig.h>
@@ -37,28 +37,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define NEWLIB_PORT_AWARE
-#include <fileXio_rpc.h>
-#include <io_common.h>
-#include <fileio.h>
-#include <fileXio.h>
-#include <iopcontrol.h>
-#include <iopheap.h>
-
+#include <fcntl.h>
+#include <sjpcm.h>
 
 #define MAX_PARTITIONS   100
 
 static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )   ) = "rom0:UDNL rom0:EELOADCNF";
-
-#include <sjpcm.h>
 
 // cosmitoMixer
 #include <sifrpc.h>
 #include <mixer/mixer.h>
 #include <mixer/mixer_thread.h>
 #include <kernel.h>     //for GetThreadId 
-
 #include <mixer/wav.h>
+
 #include "include/elf_structure.h"
 #include "include/pad_support.h"
 #include "include/modules.h"
@@ -66,73 +58,49 @@ static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )
 #include "include/doomdef.h"
 #include "include/m_argv.h"
 #include "include/d_main.h"
+
 #include "include/w_wad.h"
 
-extern unsigned char usbd[];
+extern unsigned char usbd;
 extern unsigned int size_usbd;
 
 //Declare usbhdfsd module //
-extern unsigned char usbhdfsd[];
+extern unsigned char usbhdfsd;
 extern unsigned int size_usbhdfsd;
 
 extern unsigned char usbmass_bd_irx;
 extern unsigned int size_usbmass_bd_irx;
 
-extern unsigned char SJPCM[];
+extern unsigned char SJPCM;
 extern unsigned int size_SJPCM;
 
-extern unsigned char freesd[];
-extern unsigned int size_freesd;
+extern unsigned char sio2man_irx;
+extern unsigned int size_sio2man_irx;
 
-//#ifdef PS2HDD
-/*Declare iomanX module*/
-extern unsigned char iomanX[];
-extern unsigned int size_iomanX;
-/*Declare fileXio module*/
-extern unsigned char fileXio[];
-extern unsigned int size_fileXio;
 /*Declare ps2dev9 module*/
-extern unsigned char ps2dev9[];
+extern unsigned char ps2dev9;
 extern unsigned int size_ps2dev9;
 /*Declare ps2atad module*/
-extern unsigned char ps2atad[];
+extern unsigned char ps2atad;
 extern unsigned int size_ps2atad;
 /*Declare ps2hdd module*/
-extern unsigned char ps2hdd[];
+extern unsigned char ps2hdd;
 extern unsigned int size_ps2hdd;
 /*Declare ps2fsmodule*/
-extern unsigned char ps2fs[];
+extern unsigned char ps2fs;
 extern unsigned int size_ps2fs;
 /*Declare poweroff module*/
-extern unsigned char poweroff[];
+extern unsigned char poweroff;
 extern unsigned int size_poweroff;
 /*Declare cdvd module*/
-extern unsigned char cdvd[];
+extern unsigned char cdvd;
 extern unsigned int size_cdvd;
+
+extern unsigned char freesd;
+extern unsigned int size_freesd;
 
 extern int SAMPLECOUNT = 512;
 
-/// ------------------------- por em .h
-//typedef enum
-//{
-//    square,
-//    cross,
-//    circle,
-//    triangle,
-//    select,
-//    start,
-//    l1,
-//    r1,
-//    l2,
-//    r2,
-//    l3,
-//    r3,
-//    analog1left,
-//    analog1right,
-//    analog2left,
-//    analog2right
-//
-//} config_buttons;
 
 /// these two are pairs
 typedef struct
@@ -224,7 +192,7 @@ int getFileSize(int fd)
 	return size;
 }
 
-void Display_Pal()
+void Display_mode()
 {
     #define PAL_WIDTH 480
     #define PAL_HEIGHT 576
@@ -233,37 +201,33 @@ void Display_Pal()
     #define NTSC_WIDTH 640
     #define NTSC_HEIGHT 480
     #define NTSC_BITS 32
-
+//TODO: Force disply void
     int forceDisplayMode = -1;
     int argc; 
-    int PAL;
-    int NTSC;
     char** argv; 
+
     myargc = argc; 
     myargv = argv; 
-    SDL_Surface *window;
-    SDL_Surface *screen;
     
-    window = SDL_SetVideoMode(PAL_WIDTH, PAL_HEIGHT, PAL_BITS, SDL_SWSURFACE);
+    SDL_Surface *PAL;
+    SDL_Surface *NTSC;
     
-    screen = SDL_SetVideoMode(NTSC_WIDTH, NTSC_HEIGHT, NTSC_BITS, SDL_SWSURFACE);
-
-    PAL = window;   
-    NTSC = screen;
+    PAL = SDL_SetVideoMode(PAL_WIDTH, PAL_HEIGHT, PAL_BITS, SDL_SWSURFACE);
+    
+    NTSC = SDL_SetVideoMode(NTSC_WIDTH, NTSC_HEIGHT, NTSC_BITS, SDL_SWSURFACE);
 
     if (PAL)
     {
-     SDL_Flip(window);
+     SDL_Flip(PAL);
     
      SDL_ShowCursor(SDL_DISABLE);
 
      SDL_Quit();
     }
     
-    
     else if(NTSC)
     {
-      SDL_Flip(screen);
+      SDL_Flip(NTSC);
 
       SDL_ShowCursor(SDL_DISABLE);
 
@@ -272,10 +236,9 @@ void Display_Pal()
 
     else 
     {
-        PS2SDL_ForceSignal(1);
-	printf("error");
+	 printf("error");
     }
-    //TBD: Force display here too but i can't do it right now. shit!!!
+    //TBD: Force display here with sdl1 too but i can't do it right now. shit!!!
     // Changes accordingly to filename
     forceDisplayMode = getDisplayModeFromELFName(argv);
     if (forceDisplayMode != -1)
@@ -290,6 +253,38 @@ void Display_Pal()
     D_DoomMain (); 
 
     return 0;
+}
+
+void Display_screen()
+{
+
+    //Todo: figure out whats going on the SDL1 cursor 
+    #define WIDTH 640
+    #define HEIGHT 448
+    #define BITS 32
+  
+    SDL_Surface *image;
+  
+    SDL_Surface *window;
+      
+    image = SDL_LoadBMP("gfx/ps2doom.bmp");
+    
+    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
+
+    SDL_Flip(window);
+     // printf("SDL1.2 Is not working properly", SDL_GetError());
+    SDL_BlitSurface( image, NULL, window, NULL );  
+    
+    // Set window title
+    SDL_WM_SetCaption("Display BMP", NULL);
+
+    SDL_Delay(6000);
+    
+    SDL_DisplayFormat(image);
+    
+    SDL_FreeSurface(image);
+
+    SDL_Quit();
 }
 
 //#endif
@@ -535,7 +530,10 @@ int padUtils_ReadButton(int port, int slot, u32 old_pad, u32 new_pad)
         }
     }
     else
+    {
         return -1;
+    }
+        
     
  
     return 0;   // 0 means no button was pressed
@@ -569,50 +567,23 @@ int main( int argc, char**	argv )
     int configLoadSuccess = 0;
     GetElfFilename(argv[0], deviceName, fullPath, elfFilename);
     main_thread_id = GetThreadId();
-	
-
-    SDL_Init(SDL_INIT_VIDEO);
-  
-    SDL_Surface *surface;
-  
-    SDL_Surface *window;
     
-     //Apply image to screen
-    #define WIDTH 640
-    #define HEIGHT 448
-    #define BITS 32
-
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-  
-    window = SDL_SetVideoMode(WIDTH, HEIGHT, BITS, SDL_NOFRAME);
-
-    surface = SDL_LoadBMP("gfx/ps2doom.bmp");
-    
-    SDL_BlitSurface( surface, NULL, window, NULL );
-
-    SDL_Flip(window);
-    
-    SDL_Delay(6000);
-    
-    SDL_ShowCursor(SDL_DISABLE);
-
-    SDL_FreeSurface(surface);
-
-    SDL_Quit();
+    Display_screen();
     
     SifInitRpc(0); 
-/*      
-*************************************************************************************************************************************************   
-**    init_scr();                                                                                                                              **
-**    scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");                                                                                      **
-**    scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");                                 **
-**    scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic"); **
-**    scr_clear();                                                                                                                             **
-*************************************************************************************************************************************************
-*/
+
+/********************************************************************************************************************************************* 
+**********************************************************************************************************************************************    
+** init_scr();                                                                                                                              **
+** scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");                                                                                      **
+** scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");                                 **
+** scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic"); **
+** scr_clear();                                                                                                                             **
+**********************************************************************************************************************************************
+**********************************************************************************************************************************************/
+    
     printf("sample: kicking IRXs\n");
 	
-    //ret = SifLoadModule("rom0:LIBSD", 0, NULL);
     ret = SifExecModuleBuffer(freesd, size_freesd, 0, NULL, &ret);
 	printf("freesd loadmodule %d\n", ret);
 
@@ -626,7 +597,7 @@ int main( int argc, char**	argv )
     SifExecModuleBuffer(usbd, size_usbd, 0, NULL, &ret);
     SifExecModuleBuffer(usbhdfsd, size_usbhdfsd, 0, NULL, &ret);
 
-	ret = SifLoadModule("rom0:XSIO2MAN", 0, NULL);
+	ret = SifLoadModule("rom0:SIO2MAN", 0, NULL);
 	if (ret < 0) {
 		printf("Failed to load module: SIO2MAN");
         scr_printf("Failed to load module: SIO2MAN");
@@ -823,8 +794,7 @@ int main( int argc, char**	argv )
     if(use_hdd == CONFIG_TRUE)
     {
         SifExecModuleBuffer(poweroff, size_poweroff, 0, NULL, &ret);
-        SifExecModuleBuffer(iomanX, size_iomanX, 0, NULL, &ret);
-        SifExecModuleBuffer(fileXio, size_fileXio, 0, NULL, &ret);
+        SifExecModuleBuffer(sio2man_irx, size_sio2man_irx, 0, NULL, &ret);
         SifExecModuleBuffer(ps2dev9, size_ps2dev9, 0, NULL, &ret);
         SifExecModuleBuffer(ps2atad, size_ps2atad, 0, NULL, &ret);
         SifExecModuleBuffer(ps2hdd, size_ps2hdd, sizeof(hddarg), hddarg, &ret);
@@ -875,7 +845,6 @@ int main( int argc, char**	argv )
         }
 
         
-        mountErr = fileXioMount( "pfs0:", hdd_path_to_partition, FILEXIO_MOUNT );
         
         if( mountErr < 0 )
         {
@@ -896,31 +865,34 @@ int main( int argc, char**	argv )
     Mixer_Init();       // TBD : arg number channels
 
     return 0;
-    /*
-        // Until sdl isn't fixed
-    int PAL = detect_signal();
-    if (PAL == 1)
-        PS2SDL_ForceSignal(0);
-    else
-        PS2SDL_ForceSignal(1);
-
-    // Changes accordingly to filename
-    forceDisplayMode = getDisplayModeFromELFName(argv);
-    if (forceDisplayMode != -1)
-        PS2SDL_ForceSignal(forceDisplayMode);
-
-    // Sets SAMPLECOUNT accordingly to system
-    if (PAL == 1)
-        SAMPLECOUNT = 960;
-    else
-        SAMPLECOUNT = 800;
-
-
-    D_DoomMain (); 
-
-    return 0;
-   */ 
-   Display_Pal();
+    /********************************************************
+    *********************************************************  
+    **  Until sdl isn't fixed                              **
+    **  int PAL = detect_signal();                         **
+    **  if (PAL == 1)                                      **
+    **  PS2SDL_ForceSignal(0);                             **
+    ** else                                                **
+    **  PS2SDL_ForceSignal(1);                             **
+    **                                                     **
+    ** // Changes accordingly to filename                  **
+    ** forceDisplayMode = getDisplayModeFromELFName(argv); **
+    ** if (forceDisplayMode != -1)                         **
+    **  PS2SDL_ForceSignal(forceDisplayMode);              **
+    **                                                     **
+    ** // Sets SAMPLECOUNT accordingly to system           **
+    ** if (PAL == 1)                                       **
+    **  SAMPLECOUNT = 960;                                 **
+    ** else                                                **
+    **   SAMPLECOUNT = 800;                                **
+    **                                                     **
+    **                                                     **
+    ** D_DoomMain ();                                      **
+    **                                                     **
+    ** return 0;                                           **
+    **                                                     **
+    *********************************************************
+    *********************************************************/ 
+   Display_mode();
 } 
 
 
