@@ -22,7 +22,6 @@
 // static const char rcsid[] = "$Id: i_main.c,v 1.4 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <stdio.h>
@@ -41,21 +40,9 @@
 #include <fcntl.h>
 #include <sjpcm.h>
 
-/************************************************
-*************************************************
-** #define NEWLIB_PORT_AWARE                   **
-** include <fileXio_rpc.h>                     **
-** #include <io_common.h>                      **  
-** todo: rewrite fileXio module from scratch   ** 
-*************************************************
-*************************************************/
-
-
 #define MAX_PARTITIONS   100
 
 static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )   ) = "rom0:UDNL rom0:EELOADCNF";
-
-
 
 // cosmitoMixer
 #include <sifrpc.h>
@@ -597,7 +584,6 @@ int main( int argc, char**	argv )
     
     printf("sample: kicking IRXs\n");
 	
-    //ret = SifLoadModule("rom0:LIBSD", 0, NULL);
     ret = SifExecModuleBuffer(freesd, size_freesd, 0, NULL, &ret);
 	printf("freesd loadmodule %d\n", ret);
 
@@ -611,7 +597,7 @@ int main( int argc, char**	argv )
     SifExecModuleBuffer(usbd, size_usbd, 0, NULL, &ret);
     SifExecModuleBuffer(usbhdfsd, size_usbhdfsd, 0, NULL, &ret);
 
-	ret = SifLoadModule("rom0:XSIO2MAN", 0, NULL);
+	ret = SifLoadModule("rom0:SIO2MAN", 0, NULL);
 	if (ret < 0) {
 		printf("Failed to load module: SIO2MAN");
         scr_printf("Failed to load module: SIO2MAN");
@@ -808,7 +794,7 @@ int main( int argc, char**	argv )
     if(use_hdd == CONFIG_TRUE)
     {
         SifExecModuleBuffer(poweroff, size_poweroff, 0, NULL, &ret);
-        SifExecModuleBuffer(sio2man_irx, sio2man_irx, 0, NULL, &ret);
+        SifExecModuleBuffer(sio2man_irx, size_sio2man_irx, 0, NULL, &ret);
         SifExecModuleBuffer(ps2dev9, size_ps2dev9, 0, NULL, &ret);
         SifExecModuleBuffer(ps2atad, size_ps2atad, 0, NULL, &ret);
         SifExecModuleBuffer(ps2hdd, size_ps2hdd, sizeof(hddarg), hddarg, &ret);
