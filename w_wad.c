@@ -135,15 +135,15 @@ void W_AddFile (char *filename)
     // handle reload indicator.
     if (filename[0] == '~')
     {
-	filename++;
-	reloadname = filename;
-	reloadlump = numlumps;
+	 filename++;
+	 reloadname = filename;
+	 reloadlump = numlumps;
     }
 		
     if ( (handle = fopen (filename,"rb")) == NULL)
     {
-	printf (" couldn't open %s\n",filename);
-	return;
+	 printf (" couldn't open %s\n",filename);
+	 return;
     }
 
     scr_printf ("adding %s\n",filename);

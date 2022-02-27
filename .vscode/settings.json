@@ -101,6 +101,12 @@
         "m_fixed.h": "c",
         "libpad.h": "c",
         "io_common.h": "c",
-        "loadfile.h": "c"
+        "loadfile.h": "c",
+        "bit": "c",
+        "*.tcc": "c",
+        "cmath": "c",
+        "random": "c",
+        "libpwroff.h": "c",
+        "hdd-ioctl.h": "c"
     }
 }

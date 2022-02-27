@@ -107,7 +107,6 @@ int  I_GetTime (void)
 //
 void I_Init (void)
 {
-    //if ( SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0 )
         if ( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0 )
         {
 
@@ -123,7 +122,6 @@ void I_Init (void)
         {
             I_Error("Could not initialize SDL: %s", SDL_GetError());
         }
-    
 }
 
 //
@@ -146,16 +144,7 @@ void I_WaitVBL(int count)
 {
     SDL_Delay((count*1000)/70);
 }
-/*
-Dead void functions
-void I_BeginRead(void)
-{
-}
 
-void I_EndRead(void)
-{
-}
-*/
 byte*	I_AllocLow(int length)
 {
     byte*	mem;

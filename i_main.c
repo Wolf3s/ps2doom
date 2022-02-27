@@ -22,7 +22,6 @@
 // static const char rcsid[] = "$Id: i_main.c,v 1.4 1997/02/03 22:45:10 b1 Exp $";
 //-----------------------------------------------------------------------------
 
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <stdio.h>
@@ -41,21 +40,9 @@
 #include <fcntl.h>
 #include <sjpcm.h>
 
-/************************************************
-*************************************************
-** #define NEWLIB_PORT_AWARE                   **
-** include <fileXio_rpc.h>                     **
-** #include <io_common.h>                      **  
-** todo: rewrite fileXio module from scratch   ** 
-*************************************************
-*************************************************/
-
-
 #define MAX_PARTITIONS   100
 
 static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )   ) = "rom0:UDNL rom0:EELOADCNF";
-
-
 
 // cosmitoMixer
 #include <sifrpc.h>
@@ -214,7 +201,7 @@ void Display_mode()
     #define NTSC_WIDTH 640
     #define NTSC_HEIGHT 480
     #define NTSC_BITS 32
-//TODO: Force disply void
+
     int forceDisplayMode = -1;
     int argc; 
     char** argv; 
@@ -251,18 +238,26 @@ void Display_mode()
     {
 	 printf("error");
     }
-    //TBD: Force display here with sdl1 too but i can't do it right now. shit!!!
+
     // Changes accordingly to filename
     forceDisplayMode = getDisplayModeFromELFName(argv);
     if (forceDisplayMode != -1)
         PS2SDL_ForceSignal(forceDisplayMode);
 
     // Sets SAMPLECOUNT accordingly to system
-    if (PAL == 1)
+    if (NTSC == 0)
+    {
         SAMPLECOUNT = 960;
-    else
+    }
+    else if(PAL == 1)
+    {
         SAMPLECOUNT = 800;
+    }
 
+    else
+    {
+      scr_printf ("error loading SAMPLECOUNT");
+    }
     D_DoomMain (); 
 
     return 0;
@@ -585,19 +580,16 @@ int main( int argc, char**	argv )
     
     SifInitRpc(0); 
 
-/********************************************************************************************************************************************* 
-**********************************************************************************************************************************************    
-** init_scr();                                                                                                                              **
-** scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");                                                                                      **
-** scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");                                 **
-** scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic"); **
-** scr_clear();                                                                                                                             **
-**********************************************************************************************************************************************
-**********************************************************************************************************************************************/
+    /********************************************************* 
+    **********************************************************    
+    ** todo: init_scr();                                    **
+    ** scr_printf("--==== PS2DOOM v1.0.6.0 ====--\n\n\n");  **
+    ** scr_clear();                                         **
+    **********************************************************
+    **********************************************************/
     
     printf("sample: kicking IRXs\n");
 	
-    //ret = SifLoadModule("rom0:LIBSD", 0, NULL);
     ret = SifExecModuleBuffer(freesd, size_freesd, 0, NULL, &ret);
 	printf("freesd loadmodule %d\n", ret);
 
@@ -611,7 +603,7 @@ int main( int argc, char**	argv )
     SifExecModuleBuffer(usbd, size_usbd, 0, NULL, &ret);
     SifExecModuleBuffer(usbhdfsd, size_usbhdfsd, 0, NULL, &ret);
 
-	ret = SifLoadModule("rom0:XSIO2MAN", 0, NULL);
+	ret = SifLoadModule("rom0:SIO2MAN", 0, NULL);
 	if (ret < 0) {
 		printf("Failed to load module: SIO2MAN");
         scr_printf("Failed to load module: SIO2MAN");
@@ -652,7 +644,7 @@ int main( int argc, char**	argv )
     fopen("mc0:PS2DOOM/doomsav0.dsg", O_RDONLY);
     if (handle < 0)
     {
-        fioMkdir("mc0:PS2DOOM"); // Make sure it exists
+        //fioMkdir("mc0:PS2DOOM"); // Make sure it exists
         printf(" ... created mc0:PS2DOOM ...\n");
     }
     else
@@ -741,12 +733,14 @@ int main( int argc, char**	argv )
         sprintf(config_probestring, "%s", "ps2doom.hdd.use_hdd");
         if(!config_lookup_bool(&cfg, config_probestring, &use_hdd))
         {
-            use_hdd = CONFIG_FALSE;
-            printf("NOT FOUND %s\n", config_probestring);
+            printf("found: %s = %d\n", config_probestring, use_hdd);
         }
+        
         else
         {
-            printf("found: %s = %d\n", config_probestring, use_hdd);
+            
+            use_hdd = CONFIG_FALSE;
+            printf("NOT FOUND %s\n", config_probestring);
         }
 
 
@@ -755,13 +749,15 @@ int main( int argc, char**	argv )
             sprintf(config_probestring, "%s", "ps2doom.hdd.path_to_partition");
             if(!config_lookup_string(&cfg, config_probestring, &hdd_path_to_partition))
             {
+                printf("found: %s = %s\n", config_probestring, hdd_path_to_partition);
+
+            }
+            
+            else
+            {
                 printf("NOT FOUND %s\n", config_probestring);
                 scr_printf("Error: Value '%s' at ps2doom.config not found\n", config_probestring);
                 SleepThread();
-            }
-            else
-            {
-                printf("found: %s = %s\n", config_probestring, hdd_path_to_partition);
             }
 
             sprintf(config_probestring, "%s", "ps2doom.hdd.wads_folder");
@@ -771,9 +767,10 @@ int main( int argc, char**	argv )
                 scr_printf("Error: Value '%s' at ps2doom.config not found\n", config_probestring);
                 SleepThread();
             }
+            
             else
             {
-		printf("found: %s = %s\n", config_probestring, hdd_wads_folder);
+		        printf("found: %s = %s\n", config_probestring, hdd_wads_folder);
             }
         }
 
@@ -808,7 +805,7 @@ int main( int argc, char**	argv )
     if(use_hdd == CONFIG_TRUE)
     {
         SifExecModuleBuffer(poweroff, size_poweroff, 0, NULL, &ret);
-        SifExecModuleBuffer(sio2man_irx, sio2man_irx, 0, NULL, &ret);
+        SifExecModuleBuffer(sio2man_irx, size_sio2man_irx, 0, NULL, &ret);
         SifExecModuleBuffer(ps2dev9, size_ps2dev9, 0, NULL, &ret);
         SifExecModuleBuffer(ps2atad, size_ps2atad, 0, NULL, &ret);
         SifExecModuleBuffer(ps2hdd, size_ps2hdd, sizeof(hddarg), hddarg, &ret);
@@ -836,6 +833,8 @@ int main( int argc, char**	argv )
         sprintf(fullPath, "pfs0:%s/", hdd_wads_folder);
         printf(">>>>>>>>%s\n", fullPath);
         //#endif
+        
+        /*todo: rewrite the hdd support maybe i should see the open ps2 loader hdd support 
         if( hddCheckPresent() < 0 )
         {
             printf( "NO HDD FOUND!\n" );
@@ -858,14 +857,13 @@ int main( int argc, char**	argv )
             printf( "HDD Is Formatted!\n" );
         }
 
-        
-        
         if( mountErr < 0 )
         {
             //printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
             scr_printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
             SleepThread();
         }
+        */
         //#endif
     }
 

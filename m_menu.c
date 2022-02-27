@@ -509,8 +509,7 @@ menu_t  SaveDef =
 //
 void M_ReadSaveStrings(void)
 {
-    //FILE           *handle;   /// cosmito : for fioOpen type is s32
-    s32 handle;
+    FILE           *handle;  
     int             count;
     int             i;
     char    name[256];
@@ -528,9 +527,8 @@ void M_ReadSaveStrings(void)
 	    LoadMenu[i].status = 0;
 	    continue;
 	}
-	//count = fread (&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
-    count = fioRead (handle, &savegamestrings[i], SAVESTRINGSIZE);
-	//fclose (handle);
+	count = fread(&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
+	fclose (handle);
     fclose (handle);
 	LoadMenu[i].status = 1;
     }
