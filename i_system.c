@@ -34,7 +34,6 @@
 #include "include/m_misc.h"
 #include "include/i_video.h"
 
-//#include "i_sound.h"		// cosmito
 #include "include/l_sound_sdl.h"
 
 #include "include/d_net.h"

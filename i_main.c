@@ -71,73 +71,49 @@ static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )
 #include "include/doomdef.h"
 #include "include/m_argv.h"
 #include "include/d_main.h"
+
 #include "include/w_wad.h"
 
-extern unsigned char usbd[];
+extern unsigned char usbd;
 extern unsigned int size_usbd;
 
 //Declare usbhdfsd module //
-extern unsigned char usbhdfsd[];
+extern unsigned char usbhdfsd;
 extern unsigned int size_usbhdfsd;
 
 extern unsigned char usbmass_bd_irx;
 extern unsigned int size_usbmass_bd_irx;
 
-extern unsigned char SJPCM[];
+extern unsigned char SJPCM;
 extern unsigned int size_SJPCM;
 
-extern unsigned char freesd[];
-extern unsigned int size_freesd;
+extern unsigned char sio2man_irx;
+extern unsigned int size_sio2man_irx;
 
-//#ifdef PS2HDD
-/*Declare iomanX module*/
-extern unsigned char iomanX[];
-extern unsigned int size_iomanX;
-/*Declare fileXio module*/
-extern unsigned char fileXio[];
-extern unsigned int size_fileXio;
 /*Declare ps2dev9 module*/
-extern unsigned char ps2dev9[];
+extern unsigned char ps2dev9;
 extern unsigned int size_ps2dev9;
 /*Declare ps2atad module*/
-extern unsigned char ps2atad[];
+extern unsigned char ps2atad;
 extern unsigned int size_ps2atad;
 /*Declare ps2hdd module*/
-extern unsigned char ps2hdd[];
+extern unsigned char ps2hdd;
 extern unsigned int size_ps2hdd;
 /*Declare ps2fsmodule*/
-extern unsigned char ps2fs[];
+extern unsigned char ps2fs;
 extern unsigned int size_ps2fs;
 /*Declare poweroff module*/
-extern unsigned char poweroff[];
+extern unsigned char poweroff;
 extern unsigned int size_poweroff;
 /*Declare cdvd module*/
-extern unsigned char cdvd[];
+extern unsigned char cdvd;
 extern unsigned int size_cdvd;
+
+extern unsigned char freesd;
+extern unsigned int size_freesd;
 
 extern int SAMPLECOUNT = 512;
 
-/// ------------------------- por em .h
-//typedef enum
-//{
-//    square,
-//    cross,
-//    circle,
-//    triangle,
-//    select,
-//    start,
-//    l1,
-//    r1,
-//    l2,
-//    r2,
-//    l3,
-//    r3,
-//    analog1left,
-//    analog1right,
-//    analog2left,
-//    analog2right
-//
-//} config_buttons;
 
 /// these two are pairs
 typedef struct
@@ -322,7 +298,6 @@ void Display_screen()
     SDL_FreeSurface(image);
 
     SDL_Quit();
-
 }
 
 //#endif
@@ -568,7 +543,10 @@ int padUtils_ReadButton(int port, int slot, u32 old_pad, u32 new_pad)
         }
     }
     else
+    {
         return -1;
+    }
+        
     
  
     return 0;   // 0 means no button was pressed
@@ -607,15 +585,15 @@ int main( int argc, char**	argv )
     
     SifInitRpc(0); 
 
-/************************************************************************************************************************************************ 
-*************************************************************************************************************************************************    
-**    init_scr();                                                                                                                              **
-**    scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");                                                                                      **
-**    scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");                                 **
-**    scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic"); **
-**    scr_clear();                                                                                                                             **
-*************************************************************************************************************************************************
-*************************************************************************************************************************************************/
+/********************************************************************************************************************************************* 
+**********************************************************************************************************************************************    
+** init_scr();                                                                                                                              **
+** scr_printf("--==== PS2DOOM v1.0.5.0 ====--\n\n\n");                                                                                      **
+** scr_printf("A Doom PS2 port started by Lukasz Bruun, improved by cosmito and modified by wolf3s\n\n\n");                                 **
+** scr_printf ("thanks to Wally modder, Dirsors, fjtrujy, Howling Wolf & Chelsea, Squidware, el irsa and the good old friend TnA plastic"); **
+** scr_clear();                                                                                                                             **
+**********************************************************************************************************************************************
+**********************************************************************************************************************************************/
     
     printf("sample: kicking IRXs\n");
 	
@@ -830,8 +808,7 @@ int main( int argc, char**	argv )
     if(use_hdd == CONFIG_TRUE)
     {
         SifExecModuleBuffer(poweroff, size_poweroff, 0, NULL, &ret);
-        SifExecModuleBuffer(iomanX, size_iomanX, 0, NULL, &ret);
-        //SifExecModuleBuffer(fileXio, size_fileXio, 0, NULL, &ret);
+        SifExecModuleBuffer(sio2man_irx, sio2man_irx, 0, NULL, &ret);
         SifExecModuleBuffer(ps2dev9, size_ps2dev9, 0, NULL, &ret);
         SifExecModuleBuffer(ps2atad, size_ps2atad, 0, NULL, &ret);
         SifExecModuleBuffer(ps2hdd, size_ps2hdd, sizeof(hddarg), hddarg, &ret);
@@ -882,7 +859,6 @@ int main( int argc, char**	argv )
         }
 
         
-        //mountErr = fileXioMount( "pfs0:", hdd_path_to_partition, FILEXIO_MOUNT );
         
         if( mountErr < 0 )
         {
@@ -905,7 +881,7 @@ int main( int argc, char**	argv )
     return 0;
     /********************************************************
     *********************************************************  
-    **  // Until sdl isn't fixed                           **
+    **  Until sdl isn't fixed                              **
     **  int PAL = detect_signal();                         **
     **  if (PAL == 1)                                      **
     **  PS2SDL_ForceSignal(0);                             **
