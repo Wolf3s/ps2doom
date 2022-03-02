@@ -29,7 +29,7 @@
 #include <libconfig.h>
 #include <sifrpc.h>
 #include <debug.h>
-#include <libhdd.h>
+//#include <libhdd.h>
 #include <libpwroff.h>
 #include <loadfile.h>
 #include <tamtypes.h> 
@@ -54,6 +54,7 @@ static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )
 #include "include/elf_structure.h"
 #include "include/pad_support.h"
 #include "include/modules.h"
+#include "include/hdd.h"
 
 #include "include/doomdef.h"
 #include "include/m_argv.h"
@@ -865,6 +866,28 @@ int main( int argc, char**	argv )
         }
         */
         //#endif
+        int ret;
+        ret = fopen("hdd0:", HDIOC_STATUS);
+
+        if (ret > 0)
+        {
+            printf("the Hdd is connected");
+        } 
+
+        if(ret > 1)
+        {
+          printf("the hdd is not formatted properly"); 
+        }
+
+        if(ret > 2)
+        {
+            printf("The HDD is not usable check if it´s broken or else");
+        }
+
+        if(ret > 3)
+        {
+            printf("The HDD is not connected");
+        }
     }
 
 
