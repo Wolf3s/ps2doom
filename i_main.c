@@ -29,7 +29,6 @@
 #include <libconfig.h>
 #include <sifrpc.h>
 #include <debug.h>
-//#include <libhdd.h>
 #include <libpwroff.h>
 #include <loadfile.h>
 #include <tamtypes.h> 
@@ -833,40 +832,9 @@ int main( int argc, char**	argv )
         //sprintf(fullPath, "%s/%s/", hdd_path_to_partition, hdd_wads_folder);
         sprintf(fullPath, "pfs0:%s/", hdd_wads_folder);
         printf(">>>>>>>>%s\n", fullPath);
-        //#endif
-        
-        /*todo: rewrite the hdd support maybe i should see the open ps2 loader hdd support 
-        if( hddCheckPresent() < 0 )
-        {
-            printf( "NO HDD FOUND!\n" );
-            scr_printf( "NO HDD FOUND!\n" );
-            return -1;
-        }
-        else
-        {
-            printf( "Found HDD!\n" );
-        }
 
-        if( hddCheckFormatted() < 0 )
-        {
-            printf( "HDD Not Formatted!\n" );
-            scr_printf( "HDD Not Formatted!\n" );
-            return -1;
-        }
-        else
-        {
-            printf( "HDD Is Formatted!\n" );
-        }
-
-        if( mountErr < 0 )
-        {
-            //printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
-            scr_printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
-            SleepThread();
-        }
-        */
+        //todo: rewrite the hdd support maybe i should see the open ps2 loader hdd support 
         //#endif
-        int ret;
         ret = fopen("hdd0:", HDIOC_STATUS);
 
         if (ret > 0)
