@@ -1465,21 +1465,24 @@ void D_DoomMain (void)
     {
       case shareware:
       case indetermined:
-	printf (
-	    "===========================================================================\n"
-	    "                                Open source!\n"
-	    "===========================================================================\n"
+	printf 
+    (
+    "===========================================================================\n"
+    "                                Open source!\n"
+	"===========================================================================\n"
     );
 	break;
       case registered:
       case retail:
       case commercial:
-	printf (
-	    "===========================================================================\n"
-	    "         Open source product - you can do distributions or modify the code!\n"
-	    "         However you cannot comercialy sell the product                      "
-        "         as in the terms of the DOOM Source Code License\n                   "
-	    "===========================================================================\n");
+	printf 
+    (
+	"===========================================================================\n"
+	"         Open source product - you can do distributions or modify the code!\n"
+	"         However you cannot comercialy sell the product                      "
+    "         as in the terms of the DOOM Source Code License\n                   "
+    "===========================================================================\n"
+    );
 	break;
 	
       default:
