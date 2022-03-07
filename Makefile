@@ -21,6 +21,7 @@ BIN2S = $(PS2SDK)/bin/bin2s
 
 all: $(EE_BIN)
 	mv $(EE_BIN) bin/
+	rm -f $(EE_OBJS)
 
 #poweroff Module
 poweroff.s: $(PS2SDK)/iop/irx/poweroff.irx
@@ -51,10 +52,10 @@ ps2dev9.s: $(PS2SDK)/iop/irx/ps2dev9.irx
 ps2atad: $(PS2SDK)/iop/irx/ps2atad.irx
 	$(BIN2S) $< $@ ps2atad_irx
 
-ps2fs_irx.s: $(PS2SDK)/iop/irx/ps2fs-xosd.irx
+ps2fs_irx.s: $(PS2SDK)/iop/irx/ps2fs.irx
 	$(BIN2S) $< $@ ps2fs_irx
 
-ps2hdd_irx.s: $(PS2SDK)/iop/irx/ps2hdd-xosd.irx
+ps2hdd_irx.s: $(PS2SDK)/iop/irx/ps2hdd.irx
 	$(BIN2S) $< $@ ps2hdd_irx
 
 ps2ip-nm.s: $(PS2SDK)/iop/irx/ps2ip-nm.irx
@@ -85,7 +86,7 @@ isjpcm.s: $(PS2DEV)/isjpcm/bin/isjpcm.irx
 	$(BIN2S) $< $@ isjpcm_irx
 
 clean:
-	rm -f $(EE_OBJS) rm -f $(EE_BIN_DIR)
+	rm -f $(EE_BIN_DIR)
 
 run:
 	cd bin; ps2client -h $(PS2LINK_IP) execee host$(EE_BIN_DIR)

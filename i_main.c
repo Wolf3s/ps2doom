@@ -29,7 +29,6 @@
 #include <libconfig.h>
 #include <sifrpc.h>
 #include <debug.h>
-#include <libhdd.h>
 #include <libpwroff.h>
 #include <loadfile.h>
 #include <tamtypes.h> 
@@ -54,6 +53,7 @@ static char s_pUDNL   [] __attribute__(   (  section( ".data" ), aligned( 1 )  )
 #include "include/elf_structure.h"
 #include "include/pad_support.h"
 #include "include/modules.h"
+#include "include/hdd.h"
 
 #include "include/doomdef.h"
 #include "include/m_argv.h"
@@ -832,39 +832,30 @@ int main( int argc, char**	argv )
         //sprintf(fullPath, "%s/%s/", hdd_path_to_partition, hdd_wads_folder);
         sprintf(fullPath, "pfs0:%s/", hdd_wads_folder);
         printf(">>>>>>>>%s\n", fullPath);
+
+        //todo: rewrite the hdd support maybe i should see the open ps2 loader hdd support 
         //#endif
-        
-        /*todo: rewrite the hdd support maybe i should see the open ps2 loader hdd support 
-        if( hddCheckPresent() < 0 )
+        ret = fopen("hdd0:", HDIOC_STATUS);
+
+        if (ret > 0)
         {
-            printf( "NO HDD FOUND!\n" );
-            scr_printf( "NO HDD FOUND!\n" );
-            return -1;
-        }
-        else
+            printf("the Hdd is connected");
+        } 
+
+        if(ret > 1)
         {
-            printf( "Found HDD!\n" );
+          printf("the hdd is not formatted properly"); 
         }
 
-        if( hddCheckFormatted() < 0 )
+        if(ret > 2)
         {
-            printf( "HDD Not Formatted!\n" );
-            scr_printf( "HDD Not Formatted!\n" );
-            return -1;
-        }
-        else
-        {
-            printf( "HDD Is Formatted!\n" );
+            printf("The HDD is not usable check if it´s broken or else");
         }
 
-        if( mountErr < 0 )
+        if(ret > 3)
         {
-            //printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
-            scr_printf( "Mount Error: %d while trying to mount partition '%s'. Check if path is correct.\n", mountErr, hdd_path_to_partition);
-            SleepThread();
+            printf("The HDD is not connected");
         }
-        */
-        //#endif
     }
 
 
