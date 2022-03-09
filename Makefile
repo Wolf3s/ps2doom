@@ -15,7 +15,7 @@ EE_BIN_DIR = bin/ps2doom.elf
 EE_INCS = -I$(PS2SDK)/ports/include/SDL -I$(PS2SDK)/ports/include -I$(PS2DEV)/isjpcm/include/ 
 EE_LDFLAGS = -L$(PS2SDK)/ports/lib -L$(PS2DEV)/isjpcm/lib/ -L$(PS2SDK)/iop/lib/ -L$(PS2SDK)/ee/lib/
 EE_LIBS = -lsdlmain -lsdlmixer -lsdl -lcdvd -lm -lps2ip -ldebug -lconfig -lmc -lc -lhdd -lpoweroff -lsjpcm -lmixer -llua
-EE_CFLAGS = -DUSE_RWOPS -DHAVE_CONFIG_H -DHAVE_MIXER -Wall -DLUA_USE_PS2
+EE_CFLAGS = -DUSE_RWOPS -DHAVE_CONFIG_H -DHAVE_MIXER -Wall -DLUA_USE_PS2 
 
 BIN2S = $(PS2SDK)/bin/bin2s
 
@@ -86,7 +86,7 @@ isjpcm.s: $(PS2DEV)/isjpcm/bin/isjpcm.irx
 	$(BIN2S) $< $@ isjpcm_irx
 
 clean:
-	rm -f $(EE_BIN_DIR)
+	rm -f $(EE_BIN_DIR) 
 
 run:
 	cd bin; ps2client -h $(PS2LINK_IP) execee host$(EE_BIN_DIR)
