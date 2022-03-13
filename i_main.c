@@ -33,12 +33,11 @@
 #include <loadfile.h>
 #include <tamtypes.h> 
 #include <signal.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <fcntl.h>
 #include <sjpcm.h>
-
+#include <unistd.h>
 #define MAX_PARTITIONS   100
 
 
@@ -543,7 +542,7 @@ int padUtils_ReadButton(int port, int slot, u32 old_pad, u32 new_pad)
 //int main
 int main( int argc, char**	argv ) 
 {
-    FILE *fp;
+    int *fp;
     int i, j, nj;
     const char *s;
     char configfile[256];
@@ -600,7 +599,7 @@ int main( int argc, char**	argv )
 	ret = SifLoadModule("rom0:SIO2MAN", 0, NULL);
 	if (ret < 0) {
 		printf("Failed to load module: SIO2MAN");
-        scr_printf("Failed to load module: SIO2MAN");
+        //scr_printf("Failed to load module: SIO2MAN");
 		SleepThread();
 	}
 	ret = SifLoadModule("rom0:XMCMAN", 0, NULL);
@@ -635,14 +634,14 @@ int main( int argc, char**	argv )
         printf("mc0 trouble... should save to other device... To implement\n");  /// TBD
     
     // create save/load dir (mc0:PS2DOOM)
-    fopen("mc0:PS2DOOM/doomsav0.dsg", O_RDONLY);
+    open("mc0:PS2DOOM/doomsav0.dsg", O_RDONLY);
     if (handle < 0)
     {
-        //fioMkdir("mc0:PS2DOOM"); // Make sure it exists
+        mkdir("mc0:PS2DOOM", 0007); // Make sure it exists
         printf(" ... created mc0:PS2DOOM ...\n");
     }
     else
-        fclose(handle);
+        close(handle);
 
 
     /// config
@@ -650,13 +649,13 @@ int main( int argc, char**	argv )
 
     // First, try to load from localpath. If fails, try from 'mc0:'
     
-    fp = fopen(configfile, "rb");
+    fp = open(configfile, "rb");
     if(!fp)
     {
         printf("file '%s' not found. Going to try 'mc0:PS2DOOM/ps2doom.config'\n", configfile);
         sprintf(configfile, "%s", "mc0:PS2DOOM/ps2doom.config");
 
-        fp = fopen(configfile, "rb");
+        fp = open(configfile, "rb");
         if(!fp)
         {
             // Using default actions for buttons
@@ -690,7 +689,7 @@ int main( int argc, char**	argv )
         
         config_init(&cfg);
         x = config_read(&cfg, fp);
-        fclose(fp);
+        close(fp);
         if(x)
         {
             // Process each ps2doom.controls config entries
@@ -830,7 +829,7 @@ int main( int argc, char**	argv )
 
         //todo: rewrite the hdd support maybe i should see the open ps2 loader hdd support 
         //#endif
-        ret = fopen("hdd0:", HDIOC_STATUS);
+        ret = open("hdd0:", HDIOC_STATUS);
 
         if (ret > 0)
         {
