@@ -953,7 +953,6 @@ void I_SetPalette (byte* palette)
 
 void I_InitGraphics(void)
 {
-    //should i put the loader here?
     static int	firsttime=1;
     Uint16 video_w, video_h, w, h;
     Uint8 video_bpp;

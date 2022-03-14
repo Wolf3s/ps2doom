@@ -29,7 +29,7 @@
 
 - switch to doommain.c plus libdoom? Have 
   libref, libgame etc.?
-  Another major rewrite.
+  Another major rewrite.(Maybe prboom+ is a good choice)
 
 - use XFree86 DGA, prolly not that much faster
   than MIT SHM, but allows for directly sampled
@@ -121,3 +121,6 @@
    Or internal, timer-based?
 
 - Fix the black screen after several updates(done)
+
+- kill gskit: -I$(GSKIT)/include -I$(GSKIT)/ee/dma/include -I$(GSKIT)/ee/gs/include -I$(GSKIT)/ee/toolkit/include \
+-L$(PS2DEV)/gsKit/lib -lgskit
