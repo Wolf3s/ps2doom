@@ -553,12 +553,10 @@ void I_InitGraphics(void)
     firsttime = 0;
 
     video_flags = (SDL_DOUBLEBUF | SDL_HWSURFACE);
+#ifndef _EE /* Disable --fullscreen */
     if (!!M_CheckParm("-fullscreen"))
+#endif
         video_flags |= SDL_FULLSCREEN;
-
-	#ifdef _EE
-		video_flags |= SDL_FULLSCREEN;
-	#endif 
 
     if (M_CheckParm("-2"))
 	multiply = 2;
