@@ -289,7 +289,9 @@ int GetLocalAddress (void)
 //
 void I_InitNetwork (void)
 {
+#ifdef linux
     boolean		trueval = true;
+#endif
     int			i;
     int			p;
     struct hostent*	hostentry = 0;	// host information entry
