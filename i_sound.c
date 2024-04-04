@@ -26,9 +26,7 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 
 #include <math.h>
 
-#ifndef _EE
 #include "SDL_audio.h"
-#endif
 #include "SDL_mutex.h"
 #include "SDL_byteorder.h"
 #include "SDL_version.h"
@@ -412,13 +410,9 @@ I_StartSound
     //fprintf( stderr, "starting sound %d", id );
     
     // Returns a handle (not used).
-#ifndef _EE
     SDL_LockAudio();
-#endif
     id = addsfx( id, vol, steptable[pitch], sep );
-#ifndef _EE
     SDL_UnlockAudio();
-#endif
     // fprintf( stderr, "/handle is %d\n", id );
     
     return id;
@@ -568,16 +562,13 @@ I_UpdateSoundParams
 
 void I_ShutdownSound(void)
 {    
-#ifndef _EE
   SDL_CloseAudio();
-#endif
 }
 
 
 void
 I_InitSound()
 { 
-#ifndef _EE
   SDL_AudioSpec wanted;
 
   int i;
@@ -586,14 +577,21 @@ I_InitSound()
   fprintf( stderr, "I_InitSound: ");  
   // Open the audio device
   wanted.freq = SAMPLERATE;
+#ifdef _EE
+    wanted.format = AUDIO_S16MSB;
+#else
   if ( SDL_BYTEORDER == SDL_BIG_ENDIAN ) {
     wanted.format = AUDIO_S16MSB;
   } else {
     wanted.format = AUDIO_S16LSB;
   }
+#endif
   wanted.channels = 2;
   wanted.samples = SAMPLECOUNT;
   wanted.callback = I_UpdateSound;
+#ifdef _EE
+  wanted.userdata = NULL;
+#endif
   if ( SDL_OpenAudio(&wanted, NULL) < 0 ) {
     fprintf(stderr, "couldn't open audio with desired format\n");
     return;
@@ -625,6 +623,7 @@ I_InitSound()
   
   // Finished initialization.
   fprintf(stderr, "I_InitSound: sound module ready\n");
+#ifndef _EE 
   SDL_PauseAudio(0);
 #endif
 }

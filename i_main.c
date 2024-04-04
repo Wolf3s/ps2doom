@@ -61,7 +61,7 @@ static void initMC(void)
    int mc_Type, mc_Free, mc_Format;
 
 
-   sprintf("initMC: Initializing Memory Card\n");
+   printf("initMC: Initializing Memory Card\n");
 
    ret = mcInit(MC_TYPE_XMC);
 
@@ -102,7 +102,6 @@ main
     myargv = argv; 
 
 #ifdef _EE
-    init_scr();
     reset_IOP();
     init_fileXio_driver();
     init_memcard_driver(true);
