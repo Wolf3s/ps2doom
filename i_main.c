@@ -41,6 +41,7 @@ rcsid[] = "$Id: i_main.c,v 1.4 1997/02/03 22:45:10 b1 Exp $";
 #include <kernel.h>
 #include <sys/stat.h>
 #include <ps2_all_drivers.h>
+#include <iopcontrol.h>
 
 static void reset_IOP() {
 	SifInitRpc(0);
