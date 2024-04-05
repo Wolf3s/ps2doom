@@ -595,7 +595,7 @@ void I_InitGraphics(void)
         I_Error("Smallest available mode (%dx%d) is too large!",
 						video_w, video_h);
     }
-    screen = SDL_SetVideoMode(video_w, video_h, 8, video_flags);
+    screen = SDL_SetVideoMode(video_w, video_h, video_bpp, video_flags);
     if ( screen == NULL ) {
         I_Error("Could not set %dx%d video mode: %s", video_w, video_h,
 							SDL_GetError());

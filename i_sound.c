@@ -577,15 +577,13 @@ I_InitSound()
   fprintf( stderr, "I_InitSound: ");  
   // Open the audio device
   wanted.freq = SAMPLERATE;
-#ifdef _EE
-    wanted.format = AUDIO_S16MSB;
-#else
+
   if ( SDL_BYTEORDER == SDL_BIG_ENDIAN ) {
     wanted.format = AUDIO_S16MSB;
   } else {
     wanted.format = AUDIO_S16LSB;
   }
-#endif
+
   wanted.channels = 2;
   wanted.samples = SAMPLECOUNT;
   wanted.callback = I_UpdateSound;
@@ -623,9 +621,8 @@ I_InitSound()
   
   // Finished initialization.
   fprintf(stderr, "I_InitSound: sound module ready\n");
-#ifndef _EE 
+
   SDL_PauseAudio(0);
-#endif
 }
 
 
