@@ -480,7 +480,7 @@ W_ReadLump
 
     l = lumpinfo+lump;
 	
-    // ??? I_BeginRead ();
+    I_BeginRead ();
 	
     if (l->handle == -1)
     {
@@ -507,7 +507,7 @@ W_ReadLump
     if (l->handle == -1)
 	fclose (handle);
 		
-    // ??? I_EndRead ();
+    I_EndRead ();
 }
 
 

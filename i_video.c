@@ -34,7 +34,7 @@ rcsid[] = "$Id: i_x.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #include "v_video.h"
 #include "m_argv.h"
 #include "d_main.h"
-
+#include "z_zone.h"
 #include "doomdef.h"
 
 
@@ -51,6 +51,96 @@ static int	multiply=1;
 static int joy_x=0, joy_y=0;
 
 #define JOYVAL	5000
+
+// disk image data and background overwritten by the disk to be
+// restored by EndRead
+
+static byte *disk_image = NULL;
+static int disk_image_w, disk_image_h;
+static byte *saved_background;
+
+void I_BeginRead(void)
+{
+    int y;
+
+    if (disk_image == NULL)
+        return;
+
+    // save background and copy the disk image in
+
+    for (y=0; y<disk_image_h; ++y)
+    {
+        byte *screenloc = 
+               screens[0] 
+                 + (SCREENHEIGHT - 1 - disk_image_h + y) * SCREENWIDTH
+                 + (SCREENWIDTH - 1 - disk_image_w);
+
+        memcpy(saved_background + y * disk_image_w,
+               screenloc,
+               disk_image_w);
+        memcpy(screenloc, disk_image + y * disk_image_w, disk_image_w);
+    }
+#ifdef _EE
+	SDL_Flip(screen);
+#else
+    SDL_UpdateRect(screen, 
+                   screen->w - disk_image_w, screen->h - disk_image_h, 
+                   disk_image_w, disk_image_h);
+#endif
+}
+
+void I_EndRead(void)
+{
+    int y;
+
+    if (disk_image == NULL)
+        return;
+
+    // save background and copy the disk image in
+
+    for (y=0; y<disk_image_h; ++y)
+    {
+        byte *screenloc = 
+               screens[0] 
+                 + (SCREENHEIGHT - 1 - disk_image_h + y) * SCREENWIDTH
+                 + (SCREENWIDTH - 1 - disk_image_w);
+
+        memcpy(screenloc, saved_background + y * disk_image_w, disk_image_w);
+    }
+
+#ifdef _EE
+	SDL_Flip(screen);
+#else
+    SDL_UpdateRect(screen, 
+                   screen->w - disk_image_w, screen->h - disk_image_h, 
+                   disk_image_w, disk_image_h);
+#endif
+}
+
+static void LoadDiskImage(void)
+{
+    patch_t *disk;
+    int y;
+
+    disk = (patch_t *) W_CacheLumpName("STDISK", PU_STATIC);
+
+    V_DrawPatch(0, 0, 0, disk);
+    disk_image_w = SHORT(disk->width);
+    disk_image_h = SHORT(disk->height);
+    printf("%i, %i\n", disk_image_w, disk_image_h);
+
+    disk_image = Z_Malloc(disk_image_w * disk_image_h, PU_STATIC, NULL);
+    saved_background = Z_Malloc(disk_image_w * disk_image_h, PU_STATIC, NULL);
+
+    for (y=0; y<disk_image_h; ++y) 
+    {
+        memcpy(disk_image + disk_image_w * y,
+               screens[0] + SCREENWIDTH * y,
+               disk_image_w);
+    }
+
+    Z_Free(disk);
+}
 
 //
 //  Translates the key 
@@ -508,8 +598,9 @@ void I_FinishUpdate (void)
     }
 #ifndef _EE
     SDL_UpdateRect(screen, 0, 0, 0, 0);
-#endif
+#else
 	SDL_Flip(screen);
+#endif
 }
 
 
@@ -603,6 +694,7 @@ void I_InitGraphics(void)
     SDL_ShowCursor(0);
     SDL_WM_SetCaption("SDL DOOM! v1.10", "doom");
 
+	LoadDiskImage();
     /* Set up the screen displays */
     w = SCREENWIDTH * multiply;
     h = SCREENHEIGHT * multiply;
